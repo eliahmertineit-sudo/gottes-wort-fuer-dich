@@ -1,0 +1,1111 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gottes Wort für dich</title>
+<style>
+:root{
+  --bg:#f5f4f1; --surface:#ffffff; --ink:#1d1c1a; --muted:#6e6a64; --line:#e3e0da;
+  --sans:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Noto Serif",Georgia,serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141413; --surface:#22211f; --ink:#f0ede7; --muted:#a29d95; --line:#33312e;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141413; --surface:#22211f; --ink:#f0ede7; --muted:#a29d95; --line:#33312e;
+  color-scheme:dark;
+}
+
+/* Themenfarben */
+[data-cat="ermutigung"]{--tc:#b2561b}
+[data-cat="trauer"]{--tc:#3e4a5b}
+[data-cat="hoffnung"]{--tc:#2d684c}
+[data-cat="angst"]{--tc:#4c3e78}
+[data-cat="liebe"]{--tc:#9b2838}
+[data-cat="dank"]{--tc:#8f7119}
+[data-cat="vergebung"]{--tc:#1d6770}
+[data-cat="taufe"]{--tc:#265a93}
+[data-cat="geburtstag"]{--tc:#983c74}
+[data-cat="gemischt"]{--tc:#33312d}
+
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;background:var(--bg);transition:background .3s}
+html.on-cover{background:var(--tc)}
+body{height:100%;margin:0;color:var(--ink);font-family:var(--sans);overflow:hidden;
+  -webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+button,a{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-decoration:none}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
+
+.view{display:none;height:100%;flex-direction:column}
+.view.active{display:flex}
+.col{width:100%;max-width:480px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;flex:1;min-height:0}
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+.ribbon{width:12px;height:var(--h,40px);background:var(--rb,#fff);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 7px),0 100%)}
+
+/* ---------- Start ---------- */
+#menu{overflow-y:auto;-webkit-overflow-scrolling:touch;display:none}
+#menu.active{display:block}
+#menu .col{padding-bottom:20px}
+.hero{padding:34px 0 22px}
+.hero .greet{display:block;margin:0 0 10px;color:var(--muted);font-size:1.05rem;font-weight:600}
+.hero h1{font-size:clamp(2.5rem,11.5vw,3.2rem);font-weight:750;line-height:1;letter-spacing:-.03em;margin:0}
+.hero p{margin:12px 0 0;color:var(--muted);font-size:1.05rem;line-height:1.45;max-width:30ch}
+
+.today{
+  position:relative;display:block;width:100%;text-align:left;background:var(--tc);color:#fff;
+  border-radius:24px;padding:22px 22px 20px;margin:0 0 26px;
+}
+.today .label{margin:0 0 12px;font-size:.9rem;font-weight:600;opacity:.8}
+.today .verse{font-family:var(--serif);font-size:1.38rem;line-height:1.45;margin:0}
+.today .row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px}
+.today .ref{margin:0;color:#fff;font-weight:700;font-size:.95rem}
+.today .open{background:#fff;color:var(--tc);font-weight:700;font-size:.92rem;padding:9px 14px;border-radius:999px;white-space:nowrap}
+
+
+.how{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:16px;padding:14px 16px;margin:0 0 30px}
+.how .mini{position:relative;flex:none;width:34px;height:46px;background:var(--bg);border:1.5px solid var(--line);border-radius:6px;animation:sway 2.4s ease-in-out .5s 2}
+.how .mini .ribbon{position:absolute;top:-1.5px;right:5px;width:7px;--h:16px;--rb:#9b2838}
+.how p{margin:0;font-size:.95rem;line-height:1.4;color:var(--muted)}
+.how b{color:var(--ink);font-weight:600}
+@keyframes sway{0%,100%{transform:none}25%{transform:translateX(-8px) rotate(-7deg)}75%{transform:translateX(8px) rotate(7deg)}}
+
+.sec{font-size:1.35rem;font-weight:750;letter-spacing:-.015em;margin:0 0 12px}
+.sec + .grid, .grid + .sec{margin-top:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.tile{
+  position:relative;display:flex;flex-direction:column;justify-content:space-between;text-align:left;
+  min-height:112px;padding:14px 14px 13px;border-radius:18px;background:var(--tc);color:#fff;
+  transition:transform .12s ease;
+}
+.tile:active{transform:scale(.97)}
+.grid > .tile:not(.wide):last-child:nth-child(odd){grid-column:1 / -1;min-height:88px}
+.tile .name{font-size:1.12rem;font-weight:700;letter-spacing:-.01em;line-height:1.15;padding-right:14px}
+.tile .desc{font-size:.84rem;line-height:1.3;opacity:.85;margin-top:4px}
+.tile .count{position:absolute;top:13px;right:14px;font-size:.82rem;font-weight:600;opacity:.75;font-variant-numeric:tabular-nums}
+.tile.wide{grid-column:1 / -1;min-height:0;flex-direction:row;align-items:center;gap:12px;background:var(--surface);color:var(--ink)}
+.tile.wide .txt{flex:1}
+.tile.wide .desc{color:var(--muted);opacity:1}
+.tile.wide .count{position:static;color:var(--muted);opacity:1;font-size:.95rem}
+.tile.wide .ribbon{flex:none;--h:26px;--rb:#9b2838}
+.tile.wide .ico{flex:none;width:12px;height:26px;display:grid;place-items:center;font-size:1.1rem;color:var(--muted)}
+
+.imprint{padding:10px 0 8px;color:var(--muted);font-size:.85rem;line-height:1.5}
+.imprint .links{display:flex;gap:20px;margin-top:4px}
+.imprint a{color:var(--ink);font-weight:600;padding:8px 0}
+
+/* ---------- Lesen ---------- */
+#swipe{color:#fff}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 2px}
+.back{display:inline-flex;align-items:center;gap:4px;font-weight:600;padding:8px 8px 8px 0}
+.back::before{content:"";width:9px;height:9px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 4px 0 2px}
+.head .cat{font-weight:700;font-size:1.05rem}
+.head .count{font-size:.9rem;opacity:.75;min-width:64px;text-align:right;font-variant-numeric:tabular-nums}
+
+.stack{position:relative;flex:1;min-height:0;margin:12px 0 14px}
+.card{
+  position:absolute;inset:0;background:var(--surface);color:var(--ink);border-radius:26px;
+  box-shadow:0 30px 50px -30px rgba(0,0,0,.55);
+  display:flex;flex-direction:column;padding:30px 26px 24px;overflow:hidden;
+  touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform;cursor:grab;
+}
+.card.next{transform:translateY(12px) scale(.94);opacity:.55;pointer-events:none}
+.card.next > *{visibility:hidden}
+.card .ribbon{position:absolute;top:0;right:26px;--h:0px;--rb:var(--tc);transition:height .3s cubic-bezier(.3,.8,.3,1)}
+.card.saved .ribbon{--h:56px}
+.card .cl{font-size:.88rem;font-weight:600;color:var(--tc);min-height:1.2em}
+.verse{font-family:var(--serif);font-size:clamp(1.35rem,5.8vw,1.72rem);line-height:1.48;margin:auto 0;overflow:auto;hyphens:auto;-webkit-hyphens:auto;text-wrap:pretty;padding-right:4px}
+.verse.long{font-size:clamp(1.18rem,4.9vw,1.42rem)}
+.verse.xlong{font-size:clamp(1.04rem,4.3vw,1.24rem);line-height:1.45}
+.init{font:inherit;color:inherit}
+.ref{margin:18px 0 0;font-weight:700;font-size:1rem;color:var(--ink)}
+.ref small{font-weight:500;color:var(--muted);font-size:.85rem}
+
+.endcard{cursor:default;touch-action:auto;justify-content:center}
+.endcard h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin:0 0 8px}
+.endcard p{margin:0 0 20px;color:var(--muted);line-height:1.5}
+.endcard .go{display:flex;gap:10px;flex-wrap:wrap}
+.textbtn{background:var(--tc,var(--ink));color:#fff;font-weight:700;padding:12px 18px;border-radius:999px}
+.textbtn + .textbtn{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+
+.hint{text-align:center;font-size:.88rem;opacity:.8;min-height:1.3em;margin:0 0 10px;line-height:1.35}
+.actions{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:0 0 12px}
+.act{height:52px;border-radius:999px;font-weight:700;font-size:1rem}
+.act.skip{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55);color:#fff}
+.act.share{width:52px;background:rgba(255,255,255,.16);color:#fff;display:grid;place-items:center}
+.act.share svg{width:21px;height:21px}
+.act.keep{background:#fff;color:var(--tc)}
+.act.keep::before{content:"";display:inline-block;width:9px;height:15px;margin-right:8px;vertical-align:-2px;background:currentColor;clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
+.act[disabled]{opacity:.35;pointer-events:none}
+
+/* ---------- Gemerkt und Rechtliches ---------- */
+.pagehead{padding:10px 0 0}
+.pagetitle{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin:14px 0 20px}
+.saved-item{position:relative;background:var(--surface);border-radius:18px;padding:18px 18px 12px 18px;margin-bottom:10px}
+.saved-item .ribbon{position:absolute;top:0;right:18px;--h:26px;--rb:var(--tc)}
+.saved-item p{font-family:var(--serif);font-size:1.12rem;line-height:1.5;margin:0 0 8px;padding-right:18px}
+.saved-item .meta{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.saved-item .meta i{font-style:normal;font-weight:700;font-size:.92rem}
+.saved-item .meta div{display:flex;gap:14px}
+.saved-item .meta button{color:var(--muted);font-size:.9rem;font-weight:600;padding:8px 0}
+.empty p{color:var(--muted);line-height:1.55;margin:0 0 16px}
+#fav .col{padding-bottom:24px}
+
+.legal h2{font-size:2rem;font-weight:800;letter-spacing:-.03em;margin:14px 0 8px}
+.legal h3{font-weight:700;font-size:1.02rem;margin:24px 0 6px}
+.legal p,.legal li{line-height:1.6;font-size:.97rem;margin:0 0 10px}
+.legal .stand{color:var(--muted)}
+.legal .col{padding-bottom:32px}
+.legal .bar{padding:10px 0 0}
+.legal .back svg{display:none}
+.ph{background:#ffe08a;color:#3a2a00;padding:0 4px;border-radius:3px}
+
+/* Hilfe */
+.helpline{display:inline;color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;opacity:.95}
+.endcard .help{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted);line-height:1.5}
+.endcard .help button{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+#hilfe .lead{font-size:1.05rem;line-height:1.55;color:var(--muted);margin:0 0 20px}
+.helpbox{background:var(--surface);border-radius:18px;padding:16px 18px;margin:0 0 10px}
+.helpbox h3{margin:0 0 4px;font-size:1.05rem;font-weight:700}
+.helpbox p{margin:0 0 8px;color:var(--muted);font-size:.95rem;line-height:1.45}
+.helpbox .nums{display:flex;flex-wrap:wrap;gap:8px}
+.helpbox a.call{display:inline-block;background:var(--ink);color:var(--bg);font-weight:700;padding:10px 14px;border-radius:999px;font-variant-numeric:tabular-nums}
+.helpbox a.web{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.helpbox.urgent{box-shadow:inset 0 0 0 2px #b3261e}
+
+/* Teilen als Bild */
+.sheet{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 20px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(10,10,10,.82)}
+.sheet.open{display:flex}
+.sheet img{max-width:100%;max-height:62vh;border-radius:14px;box-shadow:0 20px 40px -20px rgba(0,0,0,.8);-webkit-touch-callout:default}
+.sheet .tip{color:#fff;opacity:.8;font-size:.88rem;text-align:center;margin:0}
+.sheet .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sheet .btns button{height:48px;padding:0 18px;border-radius:999px;font-weight:700;background:#fff;color:#1d1c1a}
+.sheet .btns button.ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5)}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));
+  transform:translate(-50%,8px);background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:999px;font-weight:600;font-size:.92rem;
+  opacity:0;transition:opacity .2s, transform .2s;pointer-events:none;z-index:50;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important;animation:none !important}}
+@media (min-height:820px){.stack{max-height:600px}}
+</style>
+</head>
+<body>
+
+<section id="menu" class="view active">
+  <div class="col">
+    <header class="hero">
+      <span class="greet" id="greet">Hallo</span>
+      <h1>Gottes Wort<br>für dich</h1>
+      <p>Schön, dass du da bist. Fang mit deinem Vers für heute an oder such dir ein Thema aus.</p>
+    </header>
+    <button class="today" id="today" aria-label="Vers für heute lesen und weitere Verse anzeigen">
+      <p class="label" id="todaylabel">Dein Vers für heute</p>
+      <p class="verse"><span class="init"></span><span class="rest"></span></p>
+      <div class="row"><span class="ref"></span><span class="open">Mehr lesen</span></div>
+    </button>
+    <div class="how">
+      <div class="mini" aria-hidden="true"><span class="ribbon"></span></div>
+      <p><b>Nach links wischen</b> für den nächsten Vers, <b>nach rechts</b> zum Merken.</p>
+    </div>
+    <h2 class="sec">Was bewegt dich gerade?</h2>
+    <div class="grid" id="toc-feelings"></div>
+    <h2 class="sec">Für besondere Anlässe</h2>
+    <div class="grid" id="toc-occasions"></div>
+    <div class="grid" id="toc-more"></div>
+    <footer class="imprint">
+      Bibeltext nach der Lutherbibel von 1912, daher die alte Rechtschreibung.
+      <div class="links"><a href="#impressum" class="legal-link">Impressum</a><a href="#datenschutz" class="legal-link">Datenschutz</a></div>
+    </footer>
+  </div>
+</section>
+
+<section id="swipe" class="view">
+  <div class="col">
+    <div class="head">
+      <button class="back" data-back>Themen</button>
+      <span class="cat" id="swtitle"></span>
+      <span class="count" id="counter"></span>
+    </div>
+    <div class="stack" id="stack"></div>
+    <p class="hint" id="hint"></p>
+    <div class="actions">
+      <button class="act skip" id="btnSkip">Weiter</button>
+      <button class="act share" id="btnShare" aria-label="Vers teilen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 002 2h10a2 2 0 002-2v-5"/></svg></button>
+      <button class="act keep" id="btnKeep">Merken</button>
+    </div>
+  </div>
+</section>
+
+<section id="fav" class="view">
+  <div class="col scroll">
+    <div class="pagehead"><button class="back" data-back>Themen</button></div>
+    <h2 class="pagetitle">Deine Verse</h2>
+    <div id="favlist"></div>
+  </div>
+</section>
+
+<!-- Impressum -->
+<section id="impressum" class="view legal" data-cat="gemischt">
+  <div class="col scroll">
+    <div class="bar">
+      <button class="back" data-back aria-label="Zurück zur Auswahl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Themen
+      </button>
+    </div>
+    <h2>Impressum</h2>
+    <h3>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</h3>
+    <p>Eliah Mertineit<br>Binnenland 12a<br>23556 Lübeck<br>Deutschland</p>
+    <h3>Kontakt</h3>
+    <p>E-Mail: <a href="mailto:eliah.mertineit@web.de" style="text-decoration:underline">eliah.mertineit@web.de</a></p>
+    <h3>Art des Angebots</h3>
+    <p>Dies ist ein privates, nicht-kommerzielles Angebot. Es gibt keine Werbung, keine Bezahlinhalte und kein Benutzerkonto.</p>
+    <h3>Bibeltext</h3>
+    <p>Alle Bibelverse stammen aus der Lutherbibel in der Fassung von 1912. Dieser Text ist gemeinfrei. Die Auswahl und Zuordnung der Verse zu Themen erfolgte durch den Betreiber; sie ersetzt keine Auslegung im Zusammenhang.</p>
+    <h3>Haftung für Inhalte</h3>
+    <p>Die Inhalte wurden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität kann jedoch keine Gewähr übernommen werden. Hinweise auf Fehler, zum Beispiel im Wortlaut eines Verses, nehme ich gerne unter der oben genannten E-Mail-Adresse entgegen.</p>
+  </div>
+</section>
+
+<!-- Datenschutz -->
+<section id="datenschutz" class="view legal" data-cat="gemischt">
+  <div class="col scroll">
+    <div class="bar">
+      <button class="back" data-back aria-label="Zurück zur Auswahl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Themen
+      </button>
+    </div>
+    <h2>Datenschutzerklärung</h2>
+
+    <h3>1. Verantwortlicher</h3>
+    <p>Verantwortlich im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:<br>Eliah Mertineit, Binnenland 12a, 23556 Lübeck, E-Mail: <a href="mailto:eliah.mertineit@web.de" style="text-decoration:underline">eliah.mertineit@web.de</a></p>
+
+    <h3>2. Das Wichtigste in Kürze</h3>
+    <p>Diese Seite verwendet keine Cookies, keine Analyse- oder Tracking-Werkzeuge, keine Werbung, keine Social-Media-Plugins und lädt keine Schriftarten oder Skripte von fremden Servern. Es gibt kein Benutzerkonto und kein Kontaktformular. Ich als Betreiber erhalte keine Daten darüber, welche Verse du ansiehst oder merkst.</p>
+
+    <h3>3. Hosting und Server-Logfiles</h3>
+    <p>Diese Seite wird bereitgestellt über <span class="ph">[Name und Anschrift des Hosting-Anbieters]</span>. Beim Aufruf der Seite verarbeitet der Hosting-Anbieter technisch notwendige Daten, insbesondere die IP-Adresse, Datum und Uhrzeit des Abrufs, die aufgerufene Adresse sowie Angaben zu Browser und Betriebssystem. Dies ist erforderlich, um die Seite auszuliefern und den sicheren Betrieb zu gewährleisten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer funktionsfähigen und sicheren Bereitstellung). <span class="ph">[Falls der Anbieter Daten in die USA übermittelt: Hinweis auf die Zertifizierung nach dem EU-US Data Privacy Framework bzw. auf Standardvertragsklauseln]</span></p>
+
+    <h3>4. Speicherung auf deinem Gerät</h3>
+    <p>Wenn du einen Vers merkst, wird er im lokalen Speicher („Local Storage“) deines Browsers auf deinem eigenen Gerät abgelegt. Diese Daten verlassen dein Gerät nicht und werden nicht an mich oder Dritte übertragen. Die Speicherung ist unbedingt erforderlich, um die von dir ausdrücklich gewünschte Merken-Funktion bereitzustellen (§ 25 Abs. 2 Nr. 2 TDDDG). Du kannst gemerkte Verse jederzeit über „Entfernen“ oder durch das Löschen der Browserdaten entfernen.</p>
+
+    <h3>5. Teilen-Funktion</h3>
+    <p>Wenn du einen Vers teilst, wird die Teilen-Funktion deines Betriebssystems geöffnet oder der Text in deine Zwischenablage kopiert. Dabei werden keine Daten an mich übermittelt. Für die Verarbeitung durch die App, mit der du teilst (z. B. ein Messenger), ist deren Anbieter verantwortlich.</p>
+
+    <h3>6. Kontakt per E-Mail</h3>
+    <p>Wenn du mir eine E-Mail schreibst, verarbeite ich deine Angaben nur, um deine Anfrage zu beantworten (Art. 6 Abs. 1 lit. f DSGVO), und lösche sie, sobald sie dafür nicht mehr benötigt werden.</p>
+
+    <h3>7. Deine Rechte</h3>
+    <p>Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO), zum Beispiel bei der Behörde deines Bundeslandes.</p>
+
+    <p class="stand">Stand: November 2026</p>
+  </div>
+</section>
+
+
+
+<section id="hilfe" class="view" data-cat="gemischt">
+  <div class="col scroll">
+    <div class="pagehead"><button class="back" data-back>Zurück</button></div>
+    <h2 class="pagetitle">Du musst das nicht allein tragen</h2>
+    <p class="lead">Manchmal hilft es, mit einem Menschen zu reden. Diese Angebote sind kostenlos, und du musst deinen Namen nicht nennen.</p>
+    <div class="helpbox">
+      <h3>TelefonSeelsorge</h3>
+      <p>Rund um die Uhr erreichbar, auch nachts und am Wochenende.</p>
+      <div class="nums"><a class="call" href="tel:08001110111">0800 111 0 111</a><a class="call" href="tel:08001110222">0800 111 0 222</a><a class="call" href="tel:116123">116 123</a></div>
+      <p style="margin-top:10px">Lieber schreiben? <a class="web" href="https://online.telefonseelsorge.de" target="_blank" rel="noopener">Chat und Mail</a></p>
+    </div>
+    <div class="helpbox">
+      <h3>Nummer gegen Kummer</h3>
+      <p>Für Kinder und Jugendliche. Erreichbar zu festen Zeiten, die auf der Webseite stehen.</p>
+      <div class="nums"><a class="call" href="tel:116111">116 111</a></div>
+      <p style="margin-top:10px"><a class="web" href="https://www.nummergegenkummer.de" target="_blank" rel="noopener">nummergegenkummer.de</a></p>
+    </div>
+    <div class="helpbox">
+      <h3>Seelsorge in deiner Gemeinde</h3>
+      <p><span class="ph">[Name und Telefonnummer der Ansprechperson eintragen]</span></p>
+    </div>
+    <div class="helpbox urgent">
+      <h3>Wenn du in akuter Gefahr bist</h3>
+      <p>Ruf sofort den Notruf an.</p>
+      <div class="nums"><a class="call" href="tel:112">112</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Vers teilen">
+  <img id="sheetimg" alt="">
+  <p class="tip" id="sheettip">Bild gedrückt halten, um es zu speichern.</p>
+  <div class="btns">
+    <button id="shareImg">Bild teilen</button>
+    <button id="shareTxt" class="ghost">Als Text</button>
+    <button id="shareClose" class="ghost">Schließen</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CATS = [
+  { id:"ermutigung", name:"Ermutigung", desc:"Wenn du Mut brauchst", verses:[
+    { r:"Josua 1,9", t:"Siehe, ich habe dir geboten, daß du getrost und freudig seist. Laß dir nicht grauen und entsetze dich nicht; denn der HERR, dein Gott, ist mit dir in allem, was du tun wirst." },
+    { r:"Jesaja 41,10", t:"Fürchte dich nicht, ich bin mit dir; weiche nicht, denn ich bin dein Gott; ich stärke dich, ich helfe dir auch, ich erhalte dich durch die rechte Hand meiner Gerechtigkeit." },
+    { r:"Philipper 4,13", t:"Ich vermag alles durch den, der mich mächtig macht, Christus." },
+    { r:"2. Timotheus 1,7", t:"Denn Gott hat uns nicht gegeben den Geist der Furcht, sondern der Kraft und der Liebe und der Zucht." },
+    { r:"Psalm 27,1", t:"Der HERR ist mein Licht und mein Heil; vor wem sollte ich mich fürchten? Der HERR ist meines Lebens Kraft; vor wem sollte mir grauen?" },
+    { r:"5. Mose 31,6", t:"Seid getrost und unverzagt, fürchtet euch nicht und laßt euch nicht vor ihnen grauen; denn der HERR, dein Gott, wird selber mit dir wandeln und wird die Hand nicht abtun noch dich verlassen." },
+    { r:"Jesaja 40,31", t:"Aber die auf den HERRN harren, kriegen neue Kraft, daß sie auffahren mit Flügeln wie Adler, daß sie laufen und nicht matt werden, daß sie wandeln und nicht müde werden." },
+    { r:"Matthäus 28,20", t:"… Und siehe, ich bin bei euch alle Tage bis an der Welt Ende." },
+    { r:"Psalm 121,1–2", t:"Ich hebe meine Augen auf zu den Bergen, von welchen mir Hilfe kommt. Meine Hilfe kommt vom HERRN, der Himmel und Erde gemacht hat." },
+    { r:"2. Korinther 12,9", t:"Und er hat zu mir gesagt: Laß dir an meiner Gnade genügen; denn meine Kraft ist in den Schwachen mächtig." },
+    { r:"Jesaja 40,29", t:"Er gibt dem Müden Kraft und Stärke genug dem Unvermögenden." },
+    { r:"Psalm 37,5", t:"Befiehl dem HERRN deine Wege und hoffe auf ihn; er wird’s wohl machen." },
+    { r:"Sprüche 3,5–6", t:"Verlaß dich auf den HERRN von ganzem Herzen, und verlaß dich nicht auf deinen Verstand; sondern gedenke an ihn in allen deinen Wegen, so wird er dich recht führen." },
+    { r:"Römer 8,31", t:"Was wollen wir nun hierzu sagen? Ist Gott für uns, wer mag wider uns sein?" },
+    { r:"Psalm 18,30", t:"Denn mit dir kann ich Kriegsvolk zerschmeißen und mit meinem Gott über die Mauer springen." },
+    { r:"Galater 6,9", t:"Lasset uns aber Gutes tun und nicht müde werden; denn zu seiner Zeit werden wir auch ernten ohne Aufhören." },
+    { r:"1. Korinther 16,13", t:"Wachet, stehet im Glauben, seid männlich und seid stark!" },
+    { r:"Psalm 28,7", t:"Der HERR ist meine Stärke und mein Schild; auf ihn hofft mein Herz, und mir ist geholfen. Und mein Herz ist fröhlich, und ich will ihm danken mit meinem Lied." },
+    { r:"Nehemia 8,10", t:"… denn die Freude am HERRN ist eure Stärke." },
+    { r:"Epheser 6,10", t:"Zuletzt, meine Brüder, seid stark in dem HERRN und in der Macht seiner Stärke." },
+    { r:"Philipper 1,6", t:"… und bin desselben in guter Zuversicht, daß, der in euch angefangen hat das gute Werk, der wird’s auch vollführen bis an den Tag Jesu Christi." },
+    { r:"Psalm 31,25", t:"Seid getrost und unverzagt alle, die ihr des HERRN harret!" },
+    { r:"Psalm 16,8", t:"Ich habe den HERRN allezeit vor Augen; denn er ist mir zur Rechten, so werde ich wohl bleiben." },
+    { r:"Psalm 18,3", t:"HERR, mein Fels, meine Burg, mein Erretter; mein Gott, mein Hort, auf den ich traue, mein Schild und Horn meines Heils und mein Schutz!" },
+    { r:"Psalm 27,14", t:"Harre des HERRN! Sei getrost und unverzagt und harre des HERRN!" },
+    { r:"Psalm 62,2–3", t:"Meine Seele ist stille zu Gott, der mir hilft. Denn er ist mein Hort, meine Hilfe, mein Schutz, daß mich kein Fall stürzen wird, wie groß er ist." },
+    { r:"Jesaja 12,2", t:"Siehe, Gott ist mein Heil; ich bin sicher und fürchte mich nicht; denn Gott der HERR ist meine Stärke und mein Psalm und ist mein Heil." },
+    { r:"Psalm 73,23–24", t:"Dennoch bleibe ich stets an dir; denn du hältst mich bei meiner rechten Hand, du leitest mich nach deinem Rat und nimmst mich endlich mit Ehren an." },
+    { r:"Psalm 40,2–3", t:"Ich harrete des HERRN; und er neigte sich zu mir und hörte mein Schreien und zog mich aus der grausamen Grube und aus dem Schlamm und stellte meine Füße auf einen Fels, daß ich gewiß treten kann …" },
+    { r:"1. Korinther 10,13", t:"Es hat euch noch keine denn menschliche Versuchung betreten; aber Gott ist getreu, der euch nicht läßt versuchen über euer Vermögen, sondern macht, daß die Versuchung so ein Ende gewinne, daß ihr’s könnet ertragen." },
+    { r:"Psalm 138,3", t:"Wenn ich dich anrufe, so erhörst du mich und gibst meiner Seele große Kraft." },
+    { r:"Jesaja 30,15", t:"… Wenn ihr umkehrtet und stille bliebet, so würde euch geholfen; durch Stillesein und Hoffen würdet ihr stark sein." },
+    { r:"Psalm 18,33", t:"Gott rüstet mich mit Kraft und macht meine Wege ohne Tadel." },
+    { r:"2. Chronik 15,7", t:"Ihr aber seid getrost und tut eure Hände nicht ab; denn euer Werk hat seinen Lohn." },
+    { r:"Habakuk 3,19", t:"Denn der HERR HERR ist meine Kraft und wird meine Füße machen wie Hirschfüße und wird mich in der Höhe führen." },
+    { r:"Psalm 37,7", t:"Sei stille dem HERRN und warte auf ihn …" },
+    { r:"Kolosser 3,23", t:"Alles, was ihr tut, das tut von Herzen als dem HERRN und nicht den Menschen …" },
+    { r:"1. Timotheus 4,12", t:"Niemand verachte deine Jugend; sondern sei ein Vorbild den Gläubigen im Wort, im Wandel, in der Liebe, im Geist, im Glauben, in der Keuschheit." },
+    { r:"Psalm 46,2", t:"Gott ist unsre Zuversicht und Stärke, eine Hilfe in den großen Nöten, die uns getroffen haben." },
+    { r:"Psalm 118,14", t:"Der HERR ist meine Macht und mein Psalm und ist mein Heil." },
+    { r:"2. Korinther 4,8–9", t:"Wir haben allenthalben Trübsal, aber wir ängsten uns nicht; uns ist bange, aber wir verzagen nicht; wir leiden Verfolgung, aber wir werden nicht verlassen; wir werden unterdrückt, aber wir kommen nicht um …" },
+    { r:"2. Korinther 4,16", t:"Darum werden wir nicht müde; sondern ob unser äußerlicher Mensch verdirbt, so wird doch der innerliche von Tag zu Tag erneuert." },
+    { r:"Jakobus 1,12", t:"Selig ist der Mann, der die Anfechtung erduldet; denn nachdem er bewährt ist, wird er die Krone des Lebens empfangen, welche Gott verheißen hat denen, die ihn liebhaben." },
+    { r:"Psalm 37,23–24", t:"Von dem HERRN wird des Mannes Gang gefördert, und er hat Lust an seinem Wege. Fällt er, so wird er nicht weggeworfen; denn der HERR hält ihn bei der Hand." },
+    { r:"Sacharja 4,6", t:"… Es soll nicht durch Heer oder Kraft, sondern durch meinen Geist geschehen, spricht der HERR Zebaoth." },
+    { r:"1. Samuel 16,7", t:"… Ein Mensch sieht, was vor Augen ist; der HERR aber sieht das Herz an." },
+    { r:"Jeremia 1,7–8", t:"Der HERR sprach aber zu mir: Sage nicht: Ich bin zu jung; sondern du sollst gehen, wohin ich dich sende, und predigen, was ich dich heiße. Fürchte dich nicht vor ihnen; denn ich bin bei dir und will dich erretten, spricht der HERR." },
+    { r:"Psalm 18,29", t:"Denn du erleuchtest meine Leuchte; der HERR, mein Gott, macht meine Finsternis licht." },
+    { r:"Römer 8,37", t:"Aber in dem allem überwinden wir weit um deswillen, der uns geliebt hat." },
+    { r:"Epheser 3,20", t:"Dem aber, der überschwenglich tun kann über alles, was wir bitten oder verstehen, nach der Kraft, die da in uns wirkt …" },
+    { r:"Psalm 119,114", t:"Du bist mein Schirm und Schild; ich hoffe auf dein Wort." }
+  ]},
+  { id:"trauer", name:"Trauer", desc:"Trost, wenn etwas fehlt", verses:[
+    { r:"Matthäus 5,4", t:"Selig sind, die da Leid tragen; denn sie sollen getröstet werden." },
+    { r:"Psalm 34,19", t:"Der HERR ist nahe bei denen, die zerbrochenen Herzens sind, und hilft denen, die ein zerschlagen Gemüt haben." },
+    { r:"Offenbarung 21,4", t:"Und Gott wird abwischen alle Tränen von ihren Augen, und der Tod wird nicht mehr sein, noch Leid noch Geschrei noch Schmerz wird mehr sein; denn das Erste ist vergangen." },
+    { r:"Psalm 147,3", t:"Er heilt, die zerbrochenes Herzens sind, und verbindet ihre Schmerzen." },
+    { r:"Johannes 11,25", t:"Jesus spricht zu ihr: Ich bin die Auferstehung und das Leben. Wer an mich glaubt, der wird leben, ob er gleich stürbe." },
+    { r:"Psalm 23,4", t:"Und ob ich schon wanderte im finstern Tal, fürchte ich kein Unglück; denn du bist bei mir, dein Stecken und Stab trösten mich." },
+    { r:"Psalm 73,26", t:"Wenn mir gleich Leib und Seele verschmachtet, so bist du doch, Gott, allezeit meines Herzens Trost und mein Teil." },
+    { r:"Psalm 30,6", t:"… den Abend lang währet das Weinen, aber des Morgens ist Freude." },
+    { r:"Johannes 14,1–2", t:"Euer Herz erschrecke nicht! Glaubet ihr an Gott, so glaubet ihr auch an mich. In meines Vaters Hause sind viele Wohnungen. Wenn’s nicht so wäre, so wollte ich zu euch sagen: Ich gehe hin, euch die Stätte zu bereiten." },
+    { r:"Johannes 14,18", t:"Ich will euch nicht Waisen lassen; ich komme zu euch." },
+    { r:"Johannes 16,22", t:"Und ihr habt auch nun Traurigkeit; aber ich will euch wiedersehen, und euer Herz soll sich freuen, und eure Freude soll niemand von euch nehmen." },
+    { r:"1. Thessalonicher 4,13", t:"Wir wollen euch aber, liebe Brüder, nicht verhalten von denen, die da schlafen, auf daß ihr nicht traurig seid wie die andern, die keine Hoffnung haben." },
+    { r:"Psalm 56,9", t:"Zähle die Wege meiner Flucht; fasse meine Tränen in deinen Krug. Ohne Zweifel, du zählst sie." },
+    { r:"Psalm 126,5", t:"Die mit Tränen säen, werden mit Freuden ernten." },
+    { r:"2. Korinther 1,3–4", t:"Gelobet sei Gott und der Vater unsers HERRN Jesu Christi, der Vater der Barmherzigkeit und Gott alles Trostes, der uns tröstet in aller unsrer Trübsal, daß wir auch trösten können, die da sind in allerlei Trübsal, mit dem Trost, mit dem wir getröstet werden von Gott." },
+    { r:"Römer 14,8", t:"Leben wir, so leben wir dem HERRN; sterben wir, so sterben wir dem HERRN. Darum, wir leben oder sterben, so sind wir des HERRN." },
+    { r:"Psalm 31,16", t:"Meine Zeit steht in deinen Händen …" },
+    { r:"Jesaja 25,8", t:"Er wird den Tod verschlingen ewiglich; und der HERR HERR wird die Tränen von allen Angesichtern abwischen …" },
+    { r:"Klagelieder 3,31–32", t:"Denn der HERR verstößt nicht ewiglich; sondern er betrübt wohl und erbarmt sich wieder nach seiner großen Güte." },
+    { r:"Psalm 9,10", t:"Und der HERR ist des Armen Schutz, ein Schutz in der Not." },
+    { r:"Psalm 39,8", t:"Nun, HERR, wes soll ich mich trösten? Ich hoffe auf dich." },
+    { r:"1. Korinther 15,55", t:"Tod, wo ist dein Stachel? Hölle, wo ist dein Sieg?" },
+    { r:"Prediger 3,1", t:"Ein jegliches hat seine Zeit, und alles Vornehmen unter dem Himmel hat seine Stunde." },
+    { r:"Psalm 13,2", t:"HERR, wie lange willst du mein so gar vergessen? Wie lange verbirgst du dein Antlitz vor mir?" },
+    { r:"Psalm 22,2", t:"Mein Gott, mein Gott, warum hast du mich verlassen? Ich heule; aber meine Hilfe ist ferne." },
+    { r:"Psalm 42,4", t:"Meine Tränen sind meine Speise Tag und Nacht, weil man täglich zu mir sagt: Wo ist nun dein Gott?" },
+    { r:"Psalm 6,7", t:"Ich bin so müde vom Seufzen; ich schwemme mein Bett die ganze Nacht und netze mit meinen Tränen mein Lager." },
+    { r:"Johannes 11,35", t:"Und Jesus gingen die Augen über." },
+    { r:"Psalm 68,20", t:"Gelobt sei der HERR täglich. Gott legt uns eine Last auf; aber er hilft uns auch." },
+    { r:"Römer 12,15", t:"Freuet euch mit den Fröhlichen und weinet mit den Weinenden." },
+    { r:"Hiob 1,21", t:"… Der HERR hat’s gegeben, der HERR hat’s genommen; der Name des HERRN sei gelobt!" },
+    { r:"Philipper 1,21", t:"Denn Christus ist mein Leben, und Sterben ist mein Gewinn." },
+    { r:"1. Korinther 15,57", t:"Gott aber sei Dank, der uns den Sieg gegeben hat durch unsern HERRN Jesus Christus!" },
+    { r:"Psalm 61,3", t:"Hienieden auf Erden rufe ich zu dir, wenn mein Herz in Angst ist; du wollest mich führen auf einen hohen Felsen." },
+    { r:"Jesaja 53,4", t:"Fürwahr, er trug unsre Krankheit und lud auf sich unsre Schmerzen …" },
+    { r:"Psalm 27,10", t:"Denn mein Vater und meine Mutter verlassen mich; aber der HERR nimmt mich auf." },
+    { r:"Jesaja 66,13", t:"Ich will euch trösten, wie einen seine Mutter tröstet …" },
+    { r:"Psalm 34,18", t:"Wenn die Gerechten schreien, so hört der HERR und errettet sie aus all ihrer Not." },
+    { r:"Johannes 16,20", t:"… Ihr werdet traurig sein; doch eure Traurigkeit soll in Freude verkehrt werden." },
+    { r:"1. Petrus 5,10", t:"Der Gott aber aller Gnade, der uns berufen hat zu seiner ewigen Herrlichkeit in Christo Jesu, der wird euch, die ihr eine kleine Zeit leidet, vollbereiten, stärken, kräftigen, gründen." },
+    { r:"Psalm 31,8", t:"Ich freue mich und bin fröhlich über deine Güte, daß du mein Elend ansiehst und erkennst meine Seele in der Not …" },
+    { r:"Jesaja 61,1", t:"… er hat mich gesandt, den Elenden zu predigen, die zerbrochenen Herzen zu verbinden …" },
+    { r:"Psalm 116,1–2", t:"Das ist mir lieb, daß der HERR meine Stimme und mein Flehen hört; daß er sein Ohr zu mir neigt; darum will ich mein Leben lang ihn anrufen." },
+    { r:"Psalm 102,2", t:"HERR, höre mein Gebet und laß mein Schreien zu dir kommen!" },
+    { r:"Römer 8,26", t:"… denn wir wissen nicht, was wir beten sollen, wie sich’s gebührt; sondern der Geist selbst vertritt uns aufs beste mit unaussprechlichem Seufzen." },
+    { r:"Hebräer 4,15", t:"Denn wir haben nicht einen Hohenpriester, der nicht könnte Mitleiden haben mit unsrer Schwachheit, sondern der versucht ist allenthalben gleichwie wir, doch ohne Sünde." },
+    { r:"Psalm 119,50", t:"Das ist mein Trost in meinem Elende; denn dein Wort erquickt mich." }
+  ]},
+  { id:"hoffnung", name:"Hoffnung", desc:"Wenn du nach vorne schauen willst", verses:[
+    { r:"Jeremia 29,11", t:"Denn ich weiß wohl, was ich für Gedanken über euch habe, spricht der HERR: Gedanken des Friedens und nicht des Leides, daß ich euch gebe das Ende, des ihr wartet." },
+    { r:"Römer 15,13", t:"Der Gott aber der Hoffnung erfülle euch mit aller Freude und Frieden im Glauben, daß ihr völlige Hoffnung habet durch die Kraft des heiligen Geistes." },
+    { r:"Römer 8,28", t:"Wir wissen aber, daß denen, die Gott lieben, alle Dinge zum Besten dienen, denen, die nach dem Vorsatz berufen sind." },
+    { r:"Klagelieder 3,22–23", t:"Die Güte des HERRN ist’s, daß wir nicht gar aus sind; seine Barmherzigkeit hat noch kein Ende, sondern sie ist alle Morgen neu, und deine Treue ist groß." },
+    { r:"Psalm 62,6", t:"Aber sei nur stille zu Gott, meine Seele; denn er ist meine Hoffnung." },
+    { r:"Hebräer 11,1", t:"Es ist aber der Glaube eine gewisse Zuversicht des, das man hofft, und ein Nichtzweifeln an dem, das man nicht sieht." },
+    { r:"Römer 5,5", t:"Hoffnung aber läßt nicht zu Schanden werden; denn die Liebe Gottes ist ausgegossen in unser Herz durch den heiligen Geist, welcher uns gegeben ist." },
+    { r:"Römer 8,18", t:"Denn ich halte es dafür, daß dieser Zeit Leiden der Herrlichkeit nicht wert sei, die an uns soll offenbart werden." },
+    { r:"Jesaja 43,19", t:"Denn siehe, ich will ein Neues machen; jetzt soll es aufwachsen, und ihr werdet’s erfahren, daß ich Weg mache in der Wüste und Wasserströme in der Einöde." },
+    { r:"2. Korinther 5,17", t:"Darum, ist jemand in Christo, so ist er eine neue Kreatur; das Alte ist vergangen, siehe, es ist alles neu geworden!" },
+    { r:"Jesaja 40,8", t:"Das Gras verdorrt, die Blume verwelkt; aber das Wort unsers Gottes bleibt ewiglich." },
+    { r:"Hebräer 10,23", t:"Und lasset uns halten an dem Bekenntnis der Hoffnung und nicht wanken; denn er ist treu, der sie verheißen hat." },
+    { r:"1. Petrus 1,3", t:"Gelobet sei Gott und der Vater unsers HERRN Jesu Christi, der uns nach seiner großen Barmherzigkeit wiedergeboren hat zu einer lebendigen Hoffnung durch die Auferstehung Jesu Christi von den Toten …" },
+    { r:"Psalm 130,5", t:"Ich harre des HERRN; meine Seele harret, und ich hoffe auf sein Wort." },
+    { r:"Micha 7,7", t:"Ich aber will auf den HERRN schauen und harren auf den Gott meines Heils; mein Gott wird mich hören." },
+    { r:"Psalm 37,4", t:"Habe deine Lust an dem HERRN; der wird dir geben, was dein Herz wünscht." },
+    { r:"Jesaja 9,1", t:"Das Volk, so im Finstern wandelt, sieht ein großes Licht, und über die da wohnen im finstern Lande, scheint es hell." },
+    { r:"Johannes 8,12", t:"Da redete Jesus abermals zu ihnen und sprach: Ich bin das Licht der Welt; wer mir nachfolgt, der wird nicht wandeln in Finsternis, sondern wird das Licht des Lebens haben." },
+    { r:"Römer 12,12", t:"Seid fröhlich in Hoffnung, geduldig in Trübsal, haltet an am Gebet." },
+    { r:"Psalm 71,5", t:"Denn du bist meine Zuversicht, HERR, HERR, meine Hoffnung von meiner Jugend an." },
+    { r:"Psalm 25,3", t:"Denn keiner wird zu Schanden, der dein harret …" },
+    { r:"Offenbarung 21,5", t:"Und der auf dem Stuhl saß, sprach: Siehe, ich mache alles neu!" },
+    { r:"Psalm 27,13", t:"Ich glaube aber doch, daß ich sehen werde das Gute des HERRN im Lande der Lebendigen." },
+    { r:"Psalm 33,18", t:"Siehe, des HERRN Auge sieht auf die, so ihn fürchten, die auf seine Güte hoffen …" },
+    { r:"Psalm 33,22", t:"Deine Güte, HERR, sei über uns, wie wir auf dich hoffen." },
+    { r:"Psalm 146,5", t:"Wohl dem, des Hilfe der Gott Jakobs ist, des Hoffnung auf den HERRN, seinen Gott, steht …" },
+    { r:"Psalm 147,11", t:"Der HERR hat Gefallen an denen, die ihn fürchten, die auf seine Güte hoffen." },
+    { r:"Psalm 31,15", t:"Ich aber, HERR, hoffe auf dich und spreche: Du bist mein Gott!" },
+    { r:"Jesaja 40,1", t:"Tröstet, tröstet mein Volk! spricht euer Gott." },
+    { r:"Jesaja 60,1", t:"Mache dich auf, werde licht! denn dein Licht kommt, und die Herrlichkeit des HERRN geht auf über dir!" },
+    { r:"Philipper 3,20", t:"Unser Wandel aber ist im Himmel, von dannen wir auch warten des Heilands Jesu Christi, des HERRN …" },
+    { r:"Johannes 14,19", t:"… denn ich lebe, und ihr sollt auch leben." },
+    { r:"Offenbarung 22,20", t:"Es spricht, der solches bezeugt: Ja, ich komme bald. Amen, ja komm, HERR Jesu!" },
+    { r:"Psalm 42,12", t:"Was betrübst du dich, meine Seele, und bist so unruhig in mir? Harre auf Gott! denn ich werde ihm noch danken, daß er meines Angesichts Hilfe und mein Gott ist." },
+    { r:"Jesaja 65,17", t:"Denn siehe, ich will einen neuen Himmel und eine neue Erde schaffen, daß man der vorigen nicht mehr gedenken wird noch zu Herzen nehmen." },
+    { r:"1. Korinther 2,9", t:"… Was kein Auge gesehen hat und kein Ohr gehört hat und in keines Menschen Herz gekommen ist, was Gott bereitet hat denen, die ihn lieben." },
+    { r:"Psalm 126,1", t:"Wenn der HERR die Gefangenen Zions erlösen wird, so werden wir sein wie die Träumenden." },
+    { r:"Psalm 126,6", t:"Sie gehen hin und weinen und tragen edlen Samen und kommen mit Freuden und bringen ihre Garben." },
+    { r:"Johannes 11,40", t:"Jesus spricht zu ihr: Habe ich dir nicht gesagt, so du glauben würdest, du solltest die Herrlichkeit Gottes sehen?" },
+    { r:"Markus 9,23", t:"Jesus aber sprach zu ihm: Wenn du könntest glauben! Alle Dinge sind möglich dem, der da glaubt." },
+    { r:"Lukas 1,37", t:"Denn bei Gott ist kein Ding unmöglich." },
+    { r:"Matthäus 19,26", t:"… Bei den Menschen ist’s unmöglich; aber bei Gott sind alle Dinge möglich." },
+    { r:"Jesaja 42,3", t:"Das zerstoßene Rohr wird er nicht zerbrechen, und das glimmende Tocht wird er nicht auslöschen." },
+    { r:"2. Petrus 3,13", t:"Wir warten aber eines neuen Himmels und einer neuen Erde nach seiner Verheißung, in welchen Gerechtigkeit wohnt." }
+  ]},
+  { id:"angst", name:"Angst & Sorgen", desc:"Wenn dir alles zu viel wird", verses:[
+    { r:"1. Petrus 5,7", t:"Alle eure Sorge werfet auf ihn; denn er sorgt für euch." },
+    { r:"Philipper 4,6–7", t:"Sorget nichts! sondern in allen Dingen lasset eure Bitten im Gebet und Flehen mit Danksagung vor Gott kund werden. Und der Friede Gottes, welcher höher ist denn alle Vernunft, bewahre eure Herzen und Sinne in Christo Jesu!" },
+    { r:"Matthäus 11,28", t:"Kommet her zu mir alle, die ihr mühselig und beladen seid; ich will euch erquicken." },
+    { r:"Johannes 14,27", t:"Den Frieden lasse ich euch, meinen Frieden gebe ich euch. Nicht gebe ich euch, wie die Welt gibt. Euer Herz erschrecke nicht und fürchte sich nicht." },
+    { r:"Psalm 55,23", t:"Wirf dein Anliegen auf den HERRN; der wird dich versorgen und wird den Gerechten nicht ewiglich in Unruhe lassen." },
+    { r:"Jesaja 43,1", t:"Und nun spricht der HERR, der dich geschaffen hat, Jakob, und dich gemacht hat, Israel: Fürchte dich nicht, denn ich habe dich erlöst; ich habe dich bei deinem Namen gerufen; du bist mein!" },
+    { r:"Matthäus 6,34", t:"Darum sorget nicht für den andern Morgen; denn der morgende Tag wird für das Seine sorgen. Es ist genug, daß ein jeglicher Tag seine eigene Plage habe." },
+    { r:"Johannes 16,33", t:"Solches habe ich mit euch geredet, daß ihr in mir Frieden habet. In der Welt habt ihr Angst; aber seid getrost, ich habe die Welt überwunden." },
+    { r:"Jesaja 41,13", t:"Denn ich bin der HERR, dein Gott, der deine rechte Hand stärkt und zu dir spricht: Fürchte dich nicht, ich helfe dir!" },
+    { r:"Psalm 91,1–2", t:"Wer unter dem Schirm des Höchsten sitzt und unter dem Schatten des Allmächtigen bleibt, der spricht zu dem HERRN: Meine Zuversicht und meine Burg, mein Gott, auf den ich hoffe." },
+    { r:"Psalm 91,11", t:"Denn er hat seinen Engeln befohlen über dir, daß sie dich behüten auf allen deinen Wegen …" },
+    { r:"Psalm 121,3–4", t:"Er wird deinen Fuß nicht gleiten lassen; und der dich behütet, schläft nicht. Siehe, der Hüter Israels schläft noch schlummert nicht." },
+    { r:"Psalm 121,8", t:"Der HERR behüte deinen Ausgang und Eingang von nun an bis in Ewigkeit!" },
+    { r:"Psalm 94,19", t:"Ich hatte viel Bekümmernisse in meinem Herzen; aber deine Tröstungen ergötzten meine Seele." },
+    { r:"Psalm 56,4", t:"Wenn ich mich fürchte, so hoffe ich auf dich." },
+    { r:"Psalm 118,6", t:"Der HERR ist mit mir, darum fürchte ich mich nicht; was können mir Menschen tun?" },
+    { r:"Matthäus 6,26", t:"Sehet die Vögel unter dem Himmel an: sie säen nicht, sie ernten nicht, sie sammeln nicht in die Scheunen; und euer himmlischer Vater nährt sie doch. Seid ihr denn nicht viel mehr denn sie?" },
+    { r:"Matthäus 14,27", t:"Aber alsbald redete Jesus mit ihnen und sprach: Seid getrost, ich bin’s; fürchtet euch nicht!" },
+    { r:"Markus 5,36", t:"… Fürchte dich nicht, glaube nur!" },
+    { r:"Jesaja 26,3", t:"Du erhältst stets Frieden nach gewisser Zusage; denn man verläßt sich auf dich." },
+    { r:"Psalm 32,8", t:"Ich will dich unterweisen und dir den Weg zeigen, den du wandeln sollst; ich will dich mit meinen Augen leiten." },
+    { r:"1. Johannes 4,18", t:"Furcht ist nicht in der Liebe, sondern die völlige Liebe treibt die Furcht aus …" },
+    { r:"Psalm 139,5", t:"Von allen Seiten umgibst du mich und hältst deine Hand über mir." },
+    { r:"Psalm 34,5", t:"Da ich den HERRN suchte, antwortete er mir und errettete mich aus aller meiner Furcht." },
+    { r:"Psalm 46,11", t:"Seid stille und erkennet, daß ich Gott bin! …" },
+    { r:"Psalm 91,4", t:"Er wird dich mit seinen Fittichen decken, und deine Zuversicht wird sein unter seinen Flügeln. Seine Wahrheit ist Schirm und Schild …" },
+    { r:"Psalm 3,6", t:"Ich liege und schlafe und erwache; denn der HERR hält mich." },
+    { r:"5. Mose 33,27", t:"Zuflucht ist bei dem alten Gott und unter den ewigen Armen." },
+    { r:"Jesaja 35,4", t:"Saget den verzagten Herzen: Seid getrost, fürchtet euch nicht! …" },
+    { r:"Psalm 18,7", t:"Wenn mir angst ist, so rufe ich den HERRN an und schreie zu meinem Gott; so erhört er meine Stimme von seinem Tempel, und mein Schreien kommt vor ihn zu seinen Ohren." },
+    { r:"Psalm 50,15", t:"Und rufe mich an in der Not, so will ich dich erretten, so sollst du mich preisen." },
+    { r:"Psalm 120,1", t:"Ich rufe zu dem HERRN in meiner Not, und er erhört mich." },
+    { r:"Matthäus 10,30–31", t:"Nun aber sind auch eure Haare auf dem Haupt alle gezählt. Darum fürchtet euch nicht; ihr seid besser denn viele Sperlinge." },
+    { r:"Lukas 12,32", t:"Fürchte dich nicht, du kleine Herde! denn es ist eures Vaters Wohlgefallen, euch das Reich zu geben." },
+    { r:"Sprüche 18,10", t:"Der Name des HERRN ist eine feste Burg; der Gerechte läuft dahin und wird beschirmt." },
+    { r:"Nahum 1,7", t:"Der HERR ist gütig und eine Feste zur Zeit der Not und kennt die, die auf ihn trauen." },
+    { r:"Psalm 4,9", t:"Ich liege und schlafe ganz mit Frieden; denn allein du, HERR, hilfst mir, daß ich sicher wohne." },
+    { r:"Psalm 34,8", t:"Der Engel des HERRN lagert sich um die her, so ihn fürchten, und hilft ihnen aus." },
+    { r:"Psalm 46,3", t:"Darum fürchten wir uns nicht, wenn gleich die Welt unterginge und die Berge mitten ins Meer sänken …" },
+    { r:"Psalm 63,8", t:"Denn du bist mein Helfer, und unter dem Schatten deiner Flügel frohlocke ich." },
+    { r:"Psalm 57,2", t:"Sei mir gnädig, Gott, sei mir gnädig! denn auf dich traut meine Seele, und unter dem Schatten deiner Flügel habe ich Zuflucht, bis daß das Unglück vorübergehe." },
+    { r:"Jesaja 43,2", t:"Denn so du durchs Wasser gehst, will ich bei dir sein, daß dich die Ströme nicht sollen ersäufen; und so du ins Feuer gehst, sollst du nicht brennen, und die Flamme soll dich nicht versengen." },
+    { r:"Matthäus 8,26", t:"Da sagte er zu ihnen: Ihr Kleingläubigen, warum seid ihr so furchtsam? Und stand auf und bedrohte den Wind und das Meer; da ward es ganz stille." },
+    { r:"Psalm 16,1", t:"Bewahre mich, Gott; denn ich traue auf dich." },
+    { r:"Psalm 25,15", t:"Meine Augen sehen stets zu dem HERRN; denn er wird meinen Fuß aus dem Netze ziehen." },
+    { r:"Psalm 112,7", t:"Wenn eine Plage kommen will, so fürchtet er sich nicht; sein Herz hofft unverzagt auf den HERRN." },
+    { r:"Sprüche 3,24", t:"Legst du dich, so fürchtest du dich nicht; sondern liegst süß und schläfst." },
+    { r:"2. Thessalonicher 3,3", t:"Aber der HERR ist treu; der wird euch stärken und bewahren vor dem Argen." }
+  ]},
+  { id:"liebe", name:"Liebe", desc:"Wie sehr Gott dich liebt", verses:[
+    { r:"Johannes 3,16", t:"Also hat Gott die Welt geliebt, daß er seinen eingeborenen Sohn gab, auf daß alle, die an ihn glauben, nicht verloren werden, sondern das ewige Leben haben." },
+    { r:"Römer 8,38–39", t:"Denn ich bin gewiß, daß weder Tod noch Leben, weder Engel noch Fürstentümer noch Gewalten, weder Gegenwärtiges noch Zukünftiges, weder Hohes noch Tiefes noch keine andere Kreatur mag uns scheiden von der Liebe Gottes, die in Christo Jesu ist, unserm HERRN." },
+    { r:"1. Johannes 4,16", t:"Und wir haben erkannt und geglaubt die Liebe, die Gott zu uns hat. Gott ist die Liebe; und wer in der Liebe bleibt, der bleibt in Gott und Gott in ihm." },
+    { r:"Jeremia 31,3", t:"Ich habe dich je und je geliebt; darum habe ich dich zu mir gezogen aus lauter Güte." },
+    { r:"1. Korinther 13,13", t:"Nun aber bleibt Glaube, Hoffnung, Liebe, diese drei; aber die Liebe ist die größte unter ihnen." },
+    { r:"1. Johannes 4,19", t:"Lasset uns ihn lieben; denn er hat uns erst geliebt." },
+    { r:"Römer 5,8", t:"Darum preiset Gott seine Liebe gegen uns, daß Christus für uns gestorben ist, da wir noch Sünder waren." },
+    { r:"Jesaja 54,10", t:"Denn es sollen wohl Berge weichen und Hügel hinfallen; aber meine Gnade soll nicht von dir weichen, und der Bund meines Friedens soll nicht hinfallen, spricht der HERR, dein Erbarmer." },
+    { r:"1. Korinther 13,4–7", t:"Die Liebe ist langmütig und freundlich, die Liebe eifert nicht, die Liebe treibt nicht Mutwillen, sie blähet sich nicht, sie stellet sich nicht ungebärdig, sie suchet nicht das Ihre, sie läßt sich nicht erbittern, sie rechnet das Böse nicht zu, sie freuet sich nicht der Ungerechtigkeit, sie freuet sich aber der Wahrheit; sie verträgt alles, sie glaubet alles, sie hoffet alles, sie duldet alles." },
+    { r:"1. Johannes 3,1", t:"Sehet, welch eine Liebe hat uns der Vater erzeigt, daß wir Gottes Kinder sollen heißen!" },
+    { r:"Jesaja 49,15–16", t:"Kann auch ein Weib ihres Kindleins vergessen, daß sie sich nicht erbarme über den Sohn ihres Leibes? Und ob sie desselben vergäße, so will ich doch dein nicht vergessen. Siehe, in die Hände habe ich dich gezeichnet …" },
+    { r:"Johannes 15,9", t:"Gleichwie mich mein Vater liebt, also liebe ich euch auch. Bleibet in meiner Liebe!" },
+    { r:"Johannes 15,13", t:"Niemand hat größere Liebe denn die, daß er sein Leben läßt für seine Freunde." },
+    { r:"Johannes 13,34", t:"Ein neu Gebot gebe ich euch, daß ihr euch untereinander liebet, wie ich euch geliebt habe, auf daß auch ihr einander liebhabet." },
+    { r:"Psalm 103,8", t:"Barmherzig und gnädig ist der HERR, geduldig und von großer Güte." },
+    { r:"Psalm 103,13", t:"Wie sich ein Vater über Kinder erbarmt, so erbarmt sich der HERR über die, so ihn fürchten." },
+    { r:"Psalm 36,6", t:"HERR, deine Güte reicht, so weit der Himmel ist, und deine Wahrheit, so weit die Wolken gehen." },
+    { r:"1. Johannes 4,10", t:"Darin steht die Liebe: nicht, daß wir Gott geliebt haben, sondern daß er uns geliebt hat und gesandt seinen Sohn zur Versöhnung für unsre Sünden." },
+    { r:"Psalm 139,14", t:"Ich danke dir darüber, daß ich wunderbar gemacht bin; wunderbar sind deine Werke, und das erkennt meine Seele wohl." },
+    { r:"Kolosser 3,14", t:"Über alles aber ziehet an die Liebe, die da ist das Band der Vollkommenheit." },
+    { r:"1. Korinther 16,14", t:"Alle eure Dinge lasset in der Liebe geschehen!" },
+    { r:"Römer 13,10", t:"Die Liebe tut dem Nächsten nichts Böses. So ist nun die Liebe des Gesetzes Erfüllung." },
+    { r:"1. Johannes 4,7", t:"Ihr Lieben, lasset uns untereinander liebhaben; denn die Liebe ist von Gott, und wer liebhat, der ist von Gott geboren und kennt Gott." },
+    { r:"1. Johannes 4,9", t:"Darin ist erschienen die Liebe Gottes gegen uns, daß Gott seinen eingeborenen Sohn gesandt hat in die Welt, daß wir durch ihn leben sollen." },
+    { r:"1. Johannes 3,18", t:"Meine Kindlein, lasset uns nicht lieben mit Worten noch mit der Zunge, sondern mit der Tat und mit der Wahrheit." },
+    { r:"Matthäus 22,37–39", t:"Jesus aber sprach zu ihm: Du sollst lieben Gott, deinen HERRN, von ganzem Herzen, von ganzer Seele und von ganzem Gemüte. Dies ist das vornehmste und größte Gebot. Das andere aber ist dem gleich: Du sollst deinen Nächsten lieben wie dich selbst." },
+    { r:"Johannes 10,11", t:"Ich bin ein guter Hirte. Ein guter Hirte läßt sein Leben für die Schafe." },
+    { r:"Johannes 15,12", t:"Das ist mein Gebot, daß ihr euch untereinander liebet, gleichwie ich euch liebe." },
+    { r:"Hohelied 8,7", t:"Daß auch viele Wasser nicht mögen die Liebe auslöschen noch die Ströme sie ertränken …" },
+    { r:"Psalm 145,8–9", t:"Gnädig und barmherzig ist der HERR, geduldig und von großer Güte. Der HERR ist allen gütig und erbarmt sich aller seiner Werke." },
+    { r:"Römer 12,10", t:"Die brüderliche Liebe untereinander sei herzlich. Einer komme dem andern mit Ehrerbietung zuvor." },
+    { r:"1. Petrus 4,8", t:"Vor allen Dingen aber habt untereinander eine inbrünstige Liebe; denn die Liebe deckt auch der Sünden Menge." },
+    { r:"Lukas 19,10", t:"Denn des Menschen Sohn ist gekommen, zu suchen und selig zu machen, das verloren ist." },
+    { r:"Jesaja 43,4", t:"Weil du so wert bist vor meinen Augen geachtet, mußt du auch herrlich sein, und ich habe dich lieb …" },
+    { r:"Zephanja 3,17", t:"Denn der HERR, dein Gott, ist bei dir, ein starker Heiland; er wird sich über dich freuen und dir freundlich sein und wird vergeben und wird über dir mit Schall fröhlich sein." },
+    { r:"Römer 15,7", t:"Darum nehmet euch untereinander auf, gleichwie euch Christus hat aufgenommen zu Gottes Lobe." },
+    { r:"Galater 5,13", t:"… sondern durch die Liebe diene einer dem andern." },
+    { r:"Galater 5,22", t:"Die Frucht aber des Geistes ist Liebe, Freude, Friede, Geduld, Freundlichkeit, Gütigkeit, Glaube, Sanftmut, Keuschheit." },
+    { r:"Johannes 13,35", t:"Dabei wird jedermann erkennen, daß ihr meine Jünger seid, so ihr Liebe untereinander habt." },
+    { r:"Epheser 5,2", t:"Und wandelt in der Liebe, gleichwie Christus uns hat geliebt …" },
+    { r:"1. Johannes 4,11", t:"Ihr Lieben, hat uns Gott also geliebt, so sollen wir uns auch untereinander lieben." },
+    { r:"Römer 12,9", t:"Die Liebe sei nicht falsch. Hasset das Arge, hanget dem Guten an." },
+    { r:"Lukas 6,31", t:"Und wie ihr wollt, daß euch die Leute tun sollen, also tut ihnen gleich auch ihr." },
+    { r:"Matthäus 5,44", t:"Ich aber sage euch: Liebet eure Feinde; segnet, die euch fluchen; tut wohl denen, die euch hassen; bittet für die, so euch beleidigen und verfolgen …" },
+    { r:"Sprüche 10,12", t:"Haß erregt Hader; aber Liebe deckt zu alle Übertretungen." },
+    { r:"Hosea 11,4", t:"Ich ließ sie ein menschlich Joch ziehen und in Seilen der Liebe gehen …" }
+  ]},
+  { id:"dank", name:"Dankbarkeit", desc:"Freude und Dank", verses:[
+    { r:"Psalm 103,2", t:"Lobe den HERRN, meine Seele, und vergiß nicht, was er dir Gutes getan hat." },
+    { r:"1. Thessalonicher 5,18", t:"Seid dankbar in allen Dingen; denn das ist der Wille Gottes in Christo Jesu an euch." },
+    { r:"Psalm 118,24", t:"Dies ist der Tag, den der HERR macht; lasset uns freuen und fröhlich darin sein." },
+    { r:"Psalm 136,1", t:"Danket dem HERRN; denn er ist freundlich, denn seine Güte währet ewiglich." },
+    { r:"Philipper 4,4", t:"Freuet euch in dem HERRN allewege! und abermals sage ich: Freuet euch!" },
+    { r:"Jakobus 1,17", t:"Alle gute Gabe und alle vollkommene Gabe kommt von obenherab, von dem Vater des Lichts, bei welchem ist keine Veränderung noch Wechsel des Lichtes und der Finsternis." },
+    { r:"Kolosser 3,17", t:"Und alles, was ihr tut mit Worten oder mit Werken, das tut alles in dem Namen des HERRN Jesu, und danket Gott und dem Vater durch ihn." },
+    { r:"Psalm 103,3–4", t:"Der dir alle deine Sünden vergibt und heilet alle deine Gebrechen, der dein Leben vom Verderben erlöst, der dich krönet mit Gnade und Barmherzigkeit …" },
+    { r:"Psalm 107,8", t:"Die sollen dem HERRN danken um seine Güte und um seine Wunder, die er an den Menschenkindern tut …" },
+    { r:"Psalm 118,28–29", t:"Du bist mein Gott, und ich danke dir; mein Gott, ich will dich preisen. Danket dem HERRN; denn er ist freundlich, und seine Güte währet ewiglich." },
+    { r:"Psalm 113,3", t:"Vom Aufgang der Sonne bis zu ihrem Niedergang sei gelobet der Name des HERRN!" },
+    { r:"Psalm 145,3", t:"Der HERR ist groß und sehr löblich, und seine Größe ist unausforschlich." },
+    { r:"Psalm 96,1", t:"Singet dem HERRN ein neues Lied; singet dem HERRN, alle Welt!" },
+    { r:"Psalm 104,24", t:"HERR, wie sind deine Werke so groß und viel! Du hast sie alle weislich geordnet, und die Erde ist voll deiner Güter." },
+    { r:"Psalm 8,2", t:"HERR, unser Herrscher, wie herrlich ist dein Name in allen Landen, da man dir dankt im Himmel!" },
+    { r:"Psalm 57,8", t:"Mein Herz ist bereit, Gott, mein Herz ist bereit, daß ich singe und lobe." },
+    { r:"Psalm 116,12", t:"Wie soll ich dem HERRN vergelten alle seine Wohltat, die er an mir tut?" },
+    { r:"Psalm 30,12", t:"Du hast mir meine Klage verwandelt in einen Reigen; du hast mir meinen Sack ausgezogen und mich mit Freude gürtet …" },
+    { r:"Psalm 92,5", t:"Denn, HERR, du lässest mich fröhlich singen von deinen Werken, und ich rühme die Geschäfte deiner Hände." },
+    { r:"Psalm 100,4", t:"Gehet zu seinen Toren ein mit Danken, zu seinen Vorhöfen mit Loben; danket ihm, lobet seinen Namen!" },
+    { r:"Psalm 103,1", t:"Lobe den HERRN, meine Seele, und was in mir ist, seinen heiligen Namen!" },
+    { r:"Psalm 92,2", t:"Das ist ein köstlich Ding, dem HERRN danken und lobsingen deinem Namen, du Höchster …" },
+    { r:"Psalm 150,6", t:"Alles, was Odem hat, lobe den HERRN! Halleluja!" },
+    { r:"Psalm 34,2", t:"Ich will den HERRN loben allezeit; sein Lob soll immerdar in meinem Munde sein." },
+    { r:"Psalm 9,2", t:"Ich danke dem HERRN von ganzem Herzen und erzähle alle deine Wunder." },
+    { r:"Epheser 5,20", t:"… und saget Dank allezeit für alles Gott und dem Vater in dem Namen unsers HERRN Jesu Christi." },
+    { r:"2. Korinther 9,15", t:"Gott aber sei Dank für seine unaussprechliche Gabe!" },
+    { r:"Kolosser 3,15", t:"Und der Friede Gottes regiere in euren Herzen, zu welchem ihr auch berufen seid in einem Leibe; und seid dankbar." },
+    { r:"Psalm 16,11", t:"Du tust mir kund den Weg zum Leben: vor dir ist Freude die Fülle und liebliches Wesen zu deiner Rechten ewiglich." },
+    { r:"Psalm 23,1", t:"Der HERR ist mein Hirte; mir wird nichts mangeln." },
+    { r:"Psalm 23,6", t:"Gutes und Barmherzigkeit werden mir folgen mein Leben lang, und ich werde bleiben im Hause des HERRN immerdar." },
+    { r:"Psalm 126,3", t:"Der HERR hat Großes an uns getan; des sind wir fröhlich." },
+    { r:"Psalm 63,4", t:"Denn deine Güte ist besser denn Leben; meine Lippen preisen dich." },
+    { r:"Psalm 95,2", t:"Lasset uns mit Danken vor sein Angesicht kommen und mit Psalmen ihm jauchzen!" },
+    { r:"Psalm 117,1–2", t:"Lobet den HERRN, alle Heiden! preiset ihn, alle Völker! Denn seine Gnade und Wahrheit waltet über uns in Ewigkeit. Halleluja!" },
+    { r:"Psalm 147,1", t:"Lobet den HERRN! denn unsern Gott loben, das ist ein köstlich Ding; solch Lob ist lieblich und schön." },
+    { r:"Psalm 98,1", t:"Singet dem HERRN ein neues Lied, denn er tut Wunder …" },
+    { r:"Psalm 69,31", t:"Ich will den Namen Gottes loben mit einem Lied und will ihn hoch ehren mit Dank." },
+    { r:"Psalm 40,6", t:"HERR, mein Gott, groß sind deine Wunder und deine Gedanken, die du an uns beweisest. Dir ist nichts gleich." },
+    { r:"Psalm 65,2", t:"Gott, man lobt dich in der Stille zu Zion, und dir bezahlt man Gelübde." },
+    { r:"Psalm 86,12", t:"Ich danke dir, HERR, mein Gott, von ganzem Herzen und ehre deinen Namen ewiglich." },
+    { r:"Psalm 89,2", t:"Ich will singen von der Gnade des HERRN ewiglich und seine Wahrheit verkündigen mit meinem Munde für und für." },
+    { r:"Hebräer 13,15", t:"So lasset uns nun opfern durch ihn das Lob Gottes allezeit, das ist die Frucht der Lippen, die seinen Namen bekennen." },
+    { r:"Psalm 33,1", t:"Freuet euch des HERRN, ihr Gerechten; die Frommen sollen ihn schön preisen." }
+  ]},
+  { id:"vergebung", name:"Vergebung", desc:"Wenn du neu anfangen willst", verses:[
+    { r:"1. Johannes 1,9", t:"So wir aber unsre Sünden bekennen, so ist er treu und gerecht, daß er uns die Sünden vergibt und reinigt uns von aller Untugend." },
+    { r:"Psalm 103,12", t:"So fern der Morgen ist vom Abend, läßt er unsre Übertretungen von uns sein." },
+    { r:"Jesaja 1,18", t:"So kommt denn und laßt uns miteinander rechten, spricht der HERR. Wenn eure Sünde gleich blutrot ist, soll sie doch schneeweiß werden; und wenn sie gleich ist wie Rosinfarbe, soll sie doch wie Wolle werden." },
+    { r:"Micha 7,19", t:"Er wird sich unser wieder erbarmen, unsere Missetat dämpfen und alle unsre Sünden in die Tiefe des Meeres werfen." },
+    { r:"Römer 8,1", t:"So ist nun nichts Verdammliches an denen, die in Christo Jesu sind, die nicht nach dem Fleische wandeln, sondern nach dem Geist." },
+    { r:"Epheser 4,32", t:"Seid aber untereinander freundlich, herzlich und vergebet einer dem andern, gleichwie Gott euch vergeben hat in Christo." },
+    { r:"Kolosser 3,13", t:"… und vertrage einer den andern und vergebet euch untereinander, so jemand Klage hat wider den andern; gleichwie Christus euch vergeben hat, also auch ihr." },
+    { r:"Psalm 51,12", t:"Schaffe in mir, Gott, ein reines Herz und gib mir einen neuen, gewissen Geist." },
+    { r:"Jesaja 44,22", t:"Ich vertilge deine Missetat wie eine Wolke und deine Sünden wie den Nebel. Kehre dich zu mir; denn ich erlöse dich." },
+    { r:"Psalm 32,1", t:"Wohl dem, dem die Übertretungen vergeben sind, dem die Sünde bedeckt ist!" },
+    { r:"Matthäus 6,14", t:"Denn so ihr den Menschen ihre Fehler vergebet, so wird euch euer himmlischer Vater auch vergeben." },
+    { r:"Psalm 130,4", t:"Denn bei dir ist die Vergebung, daß man dich fürchte." },
+    { r:"Hebräer 4,16", t:"Darum lasset uns hinzutreten mit Freudigkeit zu dem Gnadenstuhl, auf daß wir Barmherzigkeit empfangen und Gnade finden auf die Zeit, wenn uns Hilfe not sein wird." },
+    { r:"Lukas 23,34", t:"Jesus aber sprach: Vater, vergib ihnen; denn sie wissen nicht, was sie tun!" },
+    { r:"Psalm 103,10", t:"Er handelt nicht mit uns nach unsern Sünden und vergilt uns nicht nach unsrer Missetat." },
+    { r:"Psalm 51,3", t:"Gott, sei mir gnädig nach deiner Güte und tilge meine Sünden nach deiner großen Barmherzigkeit." },
+    { r:"Psalm 51,4", t:"Wasche mich wohl von meiner Missetat und reinige mich von meiner Sünde." },
+    { r:"Psalm 32,5", t:"Darum bekenne ich dir meine Sünde und verhehle meine Missetat nicht. Ich sprach: Ich will dem HERRN meine Übertretungen bekennen. Da vergabst du mir die Missetat meiner Sünde." },
+    { r:"Psalm 86,5", t:"Denn du, HERR, bist gut und gnädig, von großer Güte allen, die dich anrufen." },
+    { r:"Lukas 15,7", t:"Ich sage euch: Also wird auch Freude im Himmel sein über einen Sünder, der Buße tut, vor neunundneunzig Gerechten, die der Buße nicht bedürfen." },
+    { r:"Lukas 15,20", t:"… Da er aber noch ferne von dannen war, sah ihn sein Vater, und es jammerte ihn, lief und fiel ihm um seinen Hals und küßte ihn." },
+    { r:"Matthäus 18,21–22", t:"Da trat Petrus zu ihm und sprach: HERR, wie oft muß ich denn meinem Bruder, der an mir sündigt, vergeben? Ist’s genug siebenmal? Jesus sprach zu ihm: Ich sage dir: nicht siebenmal, sondern siebenzigmal siebenmal." },
+    { r:"Matthäus 6,12", t:"Und vergib uns unsere Schuld, wie wir unsern Schuldigern vergeben." },
+    { r:"Lukas 6,37", t:"… Vergebet, so wird euch vergeben." },
+    { r:"Epheser 1,7", t:"… an welchem wir haben die Erlösung durch sein Blut, die Vergebung der Sünden, nach dem Reichtum seiner Gnade …" },
+    { r:"Jesaja 53,5", t:"Aber er ist um unsrer Missetat willen verwundet und um unsrer Sünde willen zerschlagen. Die Strafe liegt auf ihm, auf daß wir Frieden hätten, und durch seine Wunden sind wir geheilt." },
+    { r:"Römer 3,23–24", t:"Denn es ist hier kein Unterschied: sie sind allzumal Sünder und mangeln des Ruhmes, den sie an Gott haben sollten, und werden ohne Verdienst gerecht aus seiner Gnade durch die Erlösung, so durch Christum Jesum geschehen ist …" },
+    { r:"Epheser 2,8", t:"Denn aus Gnade seid ihr selig geworden durch den Glauben, und dasselbe nicht aus euch, Gottes Gabe ist es …" },
+    { r:"Hesekiel 36,26", t:"Und ich will euch ein neues Herz und einen neuen Geist in euch geben und will das steinerne Herz aus eurem Fleisch wegnehmen und euch ein fleischernes Herz geben." },
+    { r:"Johannes 8,11", t:"… So verdamme ich dich auch nicht; gehe hin und sündige hinfort nicht mehr!" },
+    { r:"Psalm 25,7", t:"Gedenke nicht der Sünden meiner Jugend und meiner Übertretungen; gedenke aber mein nach deiner Barmherzigkeit, HERR, um deiner Güte willen!" },
+    { r:"Jesaja 43,25", t:"Ich, ich tilge deine Übertretungen um meinetwillen und gedenke deiner Sünden nicht." },
+    { r:"Jeremia 31,34", t:"… denn ich will ihnen ihre Missetat vergeben und ihrer Sünde nimmermehr gedenken." },
+    { r:"Apostelgeschichte 3,19", t:"So tut nun Buße und bekehret euch, daß eure Sünden vertilgt werden …" },
+    { r:"Kolosser 1,13–14", t:"Welcher uns errettet hat von der Obrigkeit der Finsternis und hat uns versetzt in das Reich seines lieben Sohnes, an welchem wir haben die Erlösung durch sein Blut, nämlich die Vergebung der Sünden …" },
+    { r:"2. Korinther 5,19", t:"Denn Gott war in Christo und versöhnte die Welt mit ihm selber und rechnete ihnen ihre Sünden nicht zu …" },
+    { r:"Lukas 7,48", t:"Und er sprach zu ihr: Dir sind deine Sünden vergeben." },
+    { r:"Markus 11,25", t:"Und wenn ihr steht und betet, so vergebet, wo ihr etwas wider jemand habt, auf daß auch euer Vater im Himmel euch vergebe eure Fehle." },
+    { r:"Römer 5,1", t:"Nun wir denn sind gerecht geworden durch den Glauben, so haben wir Frieden mit Gott durch unsern HERRN Jesus Christus …" },
+    { r:"Psalm 65,4", t:"Unsre Missetat drückt uns hart; du wollest unsre Sünden vergeben." }
+  ]},
+  { id:"taufe", name:"Taufe", desc:"Taufsprüche und Segen", verses:[
+    { r:"Jesaja 43,1", t:"Und nun spricht der HERR, der dich geschaffen hat, Jakob, und dich gemacht hat, Israel: Fürchte dich nicht, denn ich habe dich erlöst; ich habe dich bei deinem Namen gerufen; du bist mein!" },
+    { r:"4. Mose 6,24–26", t:"Der HERR segne dich und behüte dich; der HERR lasse sein Angesicht leuchten über dir und sei dir gnädig; der HERR hebe sein Angesicht über dich und gebe dir Frieden." },
+    { r:"Matthäus 28,19", t:"Darum gehet hin und lehret alle Völker und taufet sie im Namen des Vaters und des Sohnes und des heiligen Geistes." },
+    { r:"Matthäus 28,20", t:"… Und siehe, ich bin bei euch alle Tage bis an der Welt Ende." },
+    { r:"Markus 16,16", t:"Wer da glaubet und getauft wird, der wird selig werden …" },
+    { r:"Römer 6,4", t:"So sind wir je mit ihm begraben durch die Taufe in den Tod, auf daß, gleichwie Christus ist auferweckt von den Toten durch die Herrlichkeit des Vaters, also sollen auch wir in einem neuen Leben wandeln." },
+    { r:"Galater 3,26–27", t:"Denn ihr seid alle Gottes Kinder durch den Glauben an Christum Jesum. Denn wie viel euer getauft sind, die haben Christum angezogen." },
+    { r:"Apostelgeschichte 2,38", t:"Petrus sprach zu ihnen: Tut Buße und lasse sich ein jeglicher taufen auf den Namen Jesu Christi zur Vergebung der Sünden, so werdet ihr empfangen die Gabe des heiligen Geistes." },
+    { r:"Markus 10,14", t:"Da es aber Jesus sah, ward er unwillig und sprach zu ihnen: Lasset die Kindlein zu mir kommen und wehret ihnen nicht; denn solcher ist das Reich Gottes." },
+    { r:"Epheser 4,5–6", t:"Ein HERR, ein Glaube, eine Taufe; ein Gott und Vater unser aller, der da ist über euch allen und durch euch alle und in euch allen." },
+    { r:"Titus 3,5", t:"… nach seiner Barmherzigkeit machte er uns selig durch das Bad der Wiedergeburt und Erneuerung des heiligen Geistes …" },
+    { r:"Johannes 10,27–28", t:"Meine Schafe hören meine Stimme, und ich kenne sie, und sie folgen mir; und ich gebe ihnen das ewige Leben; und sie werden nimmermehr umkommen, und niemand wird sie mir aus meiner Hand reißen." },
+    { r:"Johannes 15,5", t:"Ich bin der Weinstock, ihr seid die Reben. Wer in mir bleibt und ich in ihm, der bringt viel Frucht; denn ohne mich könnt ihr nichts tun." },
+    { r:"Johannes 14,6", t:"Jesus spricht zu ihm: Ich bin der Weg und die Wahrheit und das Leben; niemand kommt zum Vater denn durch mich." },
+    { r:"Psalm 119,105", t:"Dein Wort ist meines Fußes Leuchte und ein Licht auf meinem Wege." },
+    { r:"1. Mose 12,2", t:"… und will dich segnen und dir einen großen Namen machen, und sollst ein Segen sein." },
+    { r:"Psalm 91,11", t:"Denn er hat seinen Engeln befohlen über dir, daß sie dich behüten auf allen deinen Wegen …" },
+    { r:"1. Johannes 3,1", t:"Sehet, welch eine Liebe hat uns der Vater erzeigt, daß wir Gottes Kinder sollen heißen!" },
+    { r:"Psalm 139,14", t:"Ich danke dir darüber, daß ich wunderbar gemacht bin; wunderbar sind deine Werke, und das erkennt meine Seele wohl." },
+    { r:"Josua 1,9", t:"Siehe, ich habe dir geboten, daß du getrost und freudig seist. Laß dir nicht grauen und entsetze dich nicht; denn der HERR, dein Gott, ist mit dir in allem, was du tun wirst." },
+    { r:"Johannes 3,5", t:"Jesus antwortete: Wahrlich, wahrlich, ich sage dir: Es sei denn, daß jemand geboren werde aus Wasser und Geist, so kann er nicht in das Reich Gottes kommen." },
+    { r:"Apostelgeschichte 16,31", t:"Sie sprachen: Glaube an den HERRN Jesus Christus, so wirst du und dein Haus selig!" },
+    { r:"Galater 2,20", t:"… Ich lebe aber; doch nun nicht ich, sondern Christus lebt in mir." },
+    { r:"Epheser 2,10", t:"Denn wir sind sein Werk, geschaffen in Christo Jesu zu guten Werken, zu welchen Gott uns zuvor bereitet hat, daß wir darin wandeln sollen." },
+    { r:"Römer 8,14", t:"Denn welche der Geist Gottes treibt, die sind Gottes Kinder." },
+    { r:"Matthäus 3,17", t:"Und siehe, eine Stimme vom Himmel herab sprach: Dies ist mein lieber Sohn, an welchem ich Wohlgefallen habe." },
+    { r:"2. Korinther 5,17", t:"Darum, ist jemand in Christo, so ist er eine neue Kreatur; das Alte ist vergangen, siehe, es ist alles neu geworden!" },
+    { r:"Psalm 23,1", t:"Der HERR ist mein Hirte; mir wird nichts mangeln." },
+    { r:"Psalm 121,7", t:"Der HERR behüte dich vor allem Übel, er behüte deine Seele." },
+    { r:"Psalm 32,8", t:"Ich will dich unterweisen und dir den Weg zeigen, den du wandeln sollst; ich will dich mit meinen Augen leiten." },
+    { r:"Psalm 139,5", t:"Von allen Seiten umgibst du mich und hältst deine Hand über mir." },
+    { r:"Johannes 8,12", t:"Da redete Jesus abermals zu ihnen und sprach: Ich bin das Licht der Welt; wer mir nachfolgt, der wird nicht wandeln in Finsternis, sondern wird das Licht des Lebens haben." },
+    { r:"1. Korinther 12,13", t:"Denn wir sind durch einen Geist alle zu einem Leibe getauft, wir seien Juden oder Griechen, Knechte oder Freie, und sind alle zu einem Geist getränkt." },
+    { r:"1. Petrus 2,9", t:"Ihr aber seid das auserwählte Geschlecht, das königliche Priestertum, das heilige Volk, das Volk des Eigentums, daß ihr verkündigen sollt die Tugenden des, der euch berufen hat von der Finsternis zu seinem wunderbaren Licht …" },
+    { r:"Johannes 1,12", t:"Wie viele ihn aber aufnahmen, denen gab er Macht, Gottes Kinder zu werden, die an seinen Namen glauben …" },
+    { r:"Galater 3,28", t:"… denn ihr seid allzumal einer in Christo Jesu." },
+    { r:"Johannes 15,16", t:"Ihr habt mich nicht erwählt; sondern ich habe euch erwählt …" },
+    { r:"Psalm 27,1", t:"Der HERR ist mein Licht und mein Heil; vor wem sollte ich mich fürchten? Der HERR ist meines Lebens Kraft; vor wem sollte mir grauen?" },
+    { r:"Jesaja 41,10", t:"Fürchte dich nicht, ich bin mit dir; weiche nicht, denn ich bin dein Gott; ich stärke dich, ich helfe dir auch, ich erhalte dich durch die rechte Hand meiner Gerechtigkeit." },
+    { r:"Sprüche 3,5–6", t:"Verlaß dich auf den HERRN von ganzem Herzen, und verlaß dich nicht auf deinen Verstand; sondern gedenke an ihn in allen deinen Wegen, so wird er dich recht führen." }
+  ]},
+  { id:"geburtstag", name:"Geburtstag", desc:"Segen für das neue Lebensjahr", verses:[
+    { r:"Psalm 31,16", t:"Meine Zeit steht in deinen Händen …" },
+    { r:"4. Mose 6,24–26", t:"Der HERR segne dich und behüte dich; der HERR lasse sein Angesicht leuchten über dir und sei dir gnädig; der HERR hebe sein Angesicht über dich und gebe dir Frieden." },
+    { r:"Psalm 139,16", t:"Deine Augen sahen mich, da ich noch unbereitet war, und waren alle Tage auf dein Buch geschrieben, die noch werden sollten, als derselben keiner da war." },
+    { r:"Psalm 139,14", t:"Ich danke dir darüber, daß ich wunderbar gemacht bin; wunderbar sind deine Werke, und das erkennt meine Seele wohl." },
+    { r:"Psalm 65,12", t:"Du krönest das Jahr mit deinem Gut, und deine Fußtapfen triefen von Fett." },
+    { r:"Jesaja 46,4", t:"Ja, ich will euch tragen bis ins Alter und bis ihr grau werdet. Ich habe es getan; ich will heben und tragen und erretten." },
+    { r:"Psalm 20,5", t:"Er gebe dir, was dein Herz begehrt, und erfülle alle deine Anschläge!" },
+    { r:"Sprüche 16,9", t:"Des Menschen Herz schlägt seinen Weg an; aber der HERR allein gibt, daß er fortgehe." },
+    { r:"Psalm 36,10", t:"Denn bei dir ist die lebendige Quelle, und in deinem Lichte sehen wir das Licht." },
+    { r:"Psalm 84,12", t:"Denn Gott der HERR ist Sonne und Schild; der HERR gibt Gnade und Ehre; er wird kein Gutes mangeln lassen den Frommen." },
+    { r:"Psalm 104,33", t:"Ich will dem HERRN singen mein Leben lang und meinen Gott loben, solange ich bin." },
+    { r:"Psalm 121,7", t:"Der HERR behüte dich vor allem Übel, er behüte deine Seele." },
+    { r:"Psalm 121,8", t:"Der HERR behüte deinen Ausgang und Eingang von nun an bis in Ewigkeit!" },
+    { r:"Psalm 118,24", t:"Dies ist der Tag, den der HERR macht; lasset uns freuen und fröhlich darin sein." },
+    { r:"Psalm 103,2", t:"Lobe den HERRN, meine Seele, und vergiß nicht, was er dir Gutes getan hat." },
+    { r:"Klagelieder 3,22–23", t:"Die Güte des HERRN ist’s, daß wir nicht gar aus sind; seine Barmherzigkeit hat noch kein Ende, sondern sie ist alle Morgen neu, und deine Treue ist groß." },
+    { r:"Jeremia 29,11", t:"Denn ich weiß wohl, was ich für Gedanken über euch habe, spricht der HERR: Gedanken des Friedens und nicht des Leides, daß ich euch gebe das Ende, des ihr wartet." },
+    { r:"Psalm 23,6", t:"Gutes und Barmherzigkeit werden mir folgen mein Leben lang, und ich werde bleiben im Hause des HERRN immerdar." },
+    { r:"Psalm 91,11", t:"Denn er hat seinen Engeln befohlen über dir, daß sie dich behüten auf allen deinen Wegen …" },
+    { r:"Psalm 37,4", t:"Habe deine Lust an dem HERRN; der wird dir geben, was dein Herz wünscht." },
+    { r:"Psalm 90,1", t:"HERR Gott, du bist unsre Zuflucht für und für." },
+    { r:"Psalm 90,17", t:"Und der HERR, unser Gott, sei uns freundlich und fördere das Werk unsrer Hände bei uns; ja, das Werk unsrer Hände wolle er fördern." },
+    { r:"Psalm 34,9", t:"Schmecket und sehet, wie freundlich der HERR ist. Wohl dem, der auf ihn traut!" },
+    { r:"Psalm 71,17", t:"Gott, du hast mich von Jugend auf gelehrt, und bis hierher verkündige ich deine Wunder." },
+    { r:"1. Samuel 7,12", t:"… Bis hierher hat uns der HERR geholfen." },
+    { r:"Psalm 139,13", t:"Denn du hast meine Nieren in deiner Gewalt; du warst über mir in meiner Mutter Leibe." },
+    { r:"Psalm 145,2", t:"Ich will dich täglich loben und deinen Namen rühmen immer und ewiglich." },
+    { r:"Psalm 16,6", t:"Das Los ist mir gefallen aufs Liebliche; mir ist ein schön Erbteil geworden." },
+    { r:"Psalm 103,5", t:"Der deinen Mund fröhlich macht, und du wieder jung wirst wie ein Adler." },
+    { r:"Psalm 121,1–2", t:"Ich hebe meine Augen auf zu den Bergen, von welchen mir Hilfe kommt. Meine Hilfe kommt vom HERRN, der Himmel und Erde gemacht hat." },
+    { r:"Psalm 16,11", t:"Du tust mir kund den Weg zum Leben: vor dir ist Freude die Fülle und liebliches Wesen zu deiner Rechten ewiglich." },
+    { r:"Psalm 32,8", t:"Ich will dich unterweisen und dir den Weg zeigen, den du wandeln sollst; ich will dich mit meinen Augen leiten." },
+    { r:"Psalm 138,8", t:"Der HERR wird’s vollführen um meinetwillen. HERR, deine Güte ist ewig. Das Werk deiner Hände wollest du nicht lassen." },
+    { r:"Psalm 92,13", t:"Der Gerechte wird grünen wie ein Palmbaum; er wird wachsen wie eine Zeder auf dem Libanon." },
+    { r:"Philipper 1,6", t:"… und bin desselben in guter Zuversicht, daß, der in euch angefangen hat das gute Werk, der wird’s auch vollführen bis an den Tag Jesu Christi." },
+    { r:"Psalm 37,5", t:"Befiehl dem HERRN deine Wege und hoffe auf ihn; er wird’s wohl machen." },
+    { r:"Psalm 115,14", t:"Der HERR segne euch je mehr und mehr, euch und eure Kinder!" },
+    { r:"Psalm 5,13", t:"Denn du, HERR, segnest die Gerechten; du krönest sie mit Gnade wie mit einem Schild." },
+    { r:"Psalm 67,2", t:"Gott sei uns gnädig und segne uns; er lasse uns sein Antlitz leuchten …" }
+  ]}
+];
+
+
+const CAT_BY_ID = Object.fromEntries(CATS.map(c => [c.id, c]));
+const OCCASIONS = ["taufe", "geburtstag"];
+function uniqueAll(){
+  const seen = new Set(), out = [];
+  CATS.forEach(c => c.verses.forEach(v => {
+    const k = v.r + "|" + v.t;
+    if(!seen.has(k)){ seen.add(k); out.push({ ...v, c:c.id }); }
+  }));
+  return out;
+}
+const FAV_KEY = "wortfuerdich:favs";
+const $ = id => document.getElementById(id);
+const stack = $("stack");
+let pendingFirst = null;
+let deck = [], idx = 0, current = null, busy = false, navigatedIn = false, hintShown = false;
+
+function load(key, fallback){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } }
+function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+let favs = load(FAV_KEY, []);
+const keyOf = v => v.r + "|" + v.t;
+const isFav = v => favs.some(f => keyOf(f) === keyOf(v));
+function addFav(v){ if(isFav(v)) return false; favs.unshift({ r:v.r, t:v.t, c:v.c }); save(FAV_KEY, favs); return true; }
+function removeFav(k){ favs = favs.filter(f => keyOf(f) !== k); save(FAV_KEY, favs); }
+
+function shuffle(a){ a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+let toastTimer;
+function toast(msg){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1500); }
+function buzz(){ try{ navigator.vibrate && navigator.vibrate(12); }catch(e){} }
+async function share(v){
+  const text = `„${v.t}“\n${v.r} (Lutherbibel 1912)`;
+  try{ if(navigator.share){ await navigator.share({ text }); return; } }
+  catch(e){ if(e && e.name === "AbortError") return; }
+  try{ await navigator.clipboard.writeText(text); toast("Vers kopiert"); }
+  catch(e){ toast("Kopieren ist hier nicht möglich"); }
+}
+
+function show(id){
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === id));
+  document.documentElement.classList.toggle("on-cover", id === "swipe");
+}
+
+function tile(id, name, desc, count, onClick, wide){
+  const b = document.createElement("button");
+  b.className = "tile" + (wide ? " wide" : ""); b.dataset.cat = id;
+  b.innerHTML = wide
+    ? `${wide === "fav" ? '<span class="ribbon" aria-hidden="true"></span>' : '<span class="ico" aria-hidden="true">⤨</span>'}<span class="txt"><span class="name"></span><span class="desc" style="display:block"></span></span><span class="count"></span>`
+    : `<span class="count"></span><span class="name"></span><span class="desc"></span>`;
+  b.querySelector(".name").textContent = name;
+  b.querySelector(".desc").textContent = desc;
+  b.querySelector(".count").textContent = count;
+  b.setAttribute("aria-label", `${name}, ${count} Verse`);
+  b.addEventListener("click", onClick);
+  return b;
+}
+function buildMenu(){
+  const feel = $("toc-feelings"), occ = $("toc-occasions"), more = $("toc-more");
+  feel.innerHTML = occ.innerHTML = more.innerHTML = "";
+  CATS.forEach(c => {
+    const el = tile(c.id, c.name, c.desc, c.verses.length, () => { navigatedIn = true; location.hash = c.id; });
+    (OCCASIONS.includes(c.id) ? occ : feel).appendChild(el);
+  });
+  more.appendChild(tile("gemischt", "Alles gemischt", "Verse aus allen Themen", uniqueAll().length, () => { navigatedIn = true; location.hash = "gemischt"; }, "mix"));
+  more.appendChild(tile("liebe", "Deine Verse", favs.length ? "Was du dir gemerkt hast" : "Noch leer, zieh einen Vers nach rechts", favs.length, () => { navigatedIn = true; location.hash = "gemerkt"; }, "fav"));
+}
+
+/* Lesen */
+function startCat(id){
+  if(id === "gemischt"){
+    current = { id, name:"Alles gemischt" }; deck = shuffle(uniqueAll());
+    if(pendingFirst){ const k = keyOf(pendingFirst); deck = [pendingFirst, ...deck.filter(v => keyOf(v) !== k)]; pendingFirst = null; }
+  }
+  else{ current = CAT_BY_ID[id]; deck = shuffle(current.verses.map(v => ({ ...v, c:id }))); }
+  idx = 0; busy = false;
+  document.documentElement.dataset.cat = id;
+  $("swtitle").textContent = current.name;
+  show("swipe");
+  renderDeck();
+  const hint = $("hint");
+  if(HELP_CATS.includes(id)){
+    hint.innerHTML = '<button class="helpline" id="helpline">Du musst das nicht allein tragen. Hier findest du Hilfe.</button>';
+    $("helpline").addEventListener("click", openHelp);
+  }else{
+    hint.textContent = hintShown ? "" : "Nimm dir Zeit. Nach rechts zum Merken, nach links für den nächsten Vers.";
+  }
+  hintShown = true;
+}
+
+function makeCard(v){
+  const el = document.createElement("article");
+  el.className = "card"; el.dataset.cat = v.c;
+  let t = v.t, partial = false;
+  if(t.startsWith("…")){ partial = true; t = t.replace(/^…\s*/, ""); }
+  const size = t.length > 240 ? " xlong" : t.length > 160 ? " long" : "";
+  el.innerHTML = `<div class="ribbon" aria-hidden="true"></div><span class="cl"></span><p class="verse${size}"><span class="init" aria-hidden="true"></span><span class="rest"></span></p><p class="ref"></p>`;
+  if(current && current.id === "gemischt") el.querySelector(".cl").textContent = CAT_BY_ID[v.c].name;
+  el.querySelector(".init").textContent = t.charAt(0).toUpperCase();
+  el.querySelector(".rest").textContent = t.slice(1);
+  el.querySelector(".verse").setAttribute("aria-label", t.charAt(0).toUpperCase() + t.slice(1));
+  const ref = el.querySelector(".ref");
+  ref.textContent = v.r;
+  if(partial){ const s = document.createElement("small"); s.textContent = " (Auszug)"; ref.appendChild(s); }
+  if(isFav(v)) el.classList.add("saved");
+  return el;
+}
+
+function endCard(){
+  const el = document.createElement("div");
+  el.className = "card endcard";
+  el.innerHTML = `<h2></h2><p>Schön, dass du dir die Zeit genommen hast. Magst du sie neu gemischt noch einmal lesen oder ein anderes Thema wählen?</p><div class="go"><button class="textbtn" id="again">Neu mischen</button><button class="textbtn" id="other">Andere Themen</button></div>`;
+  el.querySelector("h2").textContent = `Das waren alle ${deck.length} Verse.`;
+  el.querySelector("#again").addEventListener("click", () => startCat(current.id));
+  el.querySelector("#other").addEventListener("click", goBack);
+  if(HELP_CATS.includes(current.id)){
+    const h = document.createElement("p"); h.className = "help";
+    h.innerHTML = 'Wenn dich etwas gerade sehr belastet: <button>Hier findest du Menschen, die zuhören.</button>';
+    h.querySelector("button").addEventListener("click", openHelp);
+    el.appendChild(h);
+  }
+  return el;
+}
+
+function updateKeep(){
+  const v = deck[idx];
+  $("btnKeep").textContent = v && isFav(v) ? "Gemerkt" : "Merken";
+}
+
+function renderDeck(){
+  stack.innerHTML = "";
+  const done = idx >= deck.length;
+  $("counter").textContent = done ? "" : `${idx + 1} von ${deck.length}`;
+  ["btnSkip","btnShare","btnKeep"].forEach(b => $(b).disabled = done);
+  updateKeep();
+  if(done){ stack.appendChild(endCard()); return; }
+  if(idx + 1 < deck.length){ const n = makeCard(deck[idx + 1]); n.classList.add("next"); n.setAttribute("aria-hidden","true"); stack.appendChild(n); }
+  const top = makeCard(deck[idx]); top.classList.add("top"); stack.appendChild(top);
+  attachDrag(top);
+}
+
+function setPull(card, dx){
+  const r = card.querySelector(".ribbon");
+  const base = card.classList.contains("saved") ? 56 : 0;
+  r.style.transition = "none";
+  r.style.setProperty("--h", (dx > 0 ? Math.min(base + dx * .8, 190) : base) + "px");
+  card.style.opacity = dx < 0 ? Math.max(.55, 1 + dx / 400) : 1;
+}
+function resetPull(card){
+  const r = card.querySelector(".ribbon");
+  r.style.transition = ""; r.style.removeProperty("--h"); card.style.opacity = "";
+}
+
+function attachDrag(card){
+  let sx = 0, sy = 0, dx = 0, dy = 0, lastX = 0, lastT = 0, vx = 0, pid = null, moved = false;
+  card.addEventListener("pointerdown", e => {
+    if(busy || pid !== null) return;
+    pid = e.pointerId; card.setPointerCapture(pid);
+    sx = lastX = e.clientX; sy = e.clientY; lastT = performance.now();
+    dx = dy = vx = 0; moved = false; card.style.transition = "none";
+  });
+  card.addEventListener("pointermove", e => {
+    if(e.pointerId !== pid) return;
+    dx = e.clientX - sx; dy = e.clientY - sy;
+    const now = performance.now();
+    if(now - lastT > 0) vx = (e.clientX - lastX) / (now - lastT);
+    lastX = e.clientX; lastT = now;
+    if(Math.abs(dx) > 8 || Math.abs(dy) > 8) moved = true;
+    card.style.transform = `translate(${dx}px, ${dy * .25}px) rotate(${dx / 20}deg)`;
+    setPull(card, dx);
+  });
+  const end = e => {
+    if(e.pointerId !== pid) return;
+    pid = null;
+    const w = card.offsetWidth, flick = Math.abs(vx) > .55 && Math.abs(dx) > 40;
+    if(dx > w * .3 || (flick && vx > 0)) decide("right", dy * .25);
+    else if(dx < -w * .3 || (flick && vx < 0)) decide("left", dy * .25);
+    else if(!moved && e.type === "pointerup") decide("left", 0);
+    else{ card.style.transition = "transform .35s cubic-bezier(.2,.9,.3,1.15), opacity .3s"; card.style.transform = ""; resetPull(card); }
+  };
+  card.addEventListener("pointerup", end);
+  card.addEventListener("pointercancel", end);
+}
+
+function decide(dir, dy = 0){
+  if(busy || idx >= deck.length) return;
+  busy = true;
+  const top = stack.querySelector(".card.top"), next = stack.querySelector(".card.next");
+  const v = deck[idx], sign = dir === "right" ? 1 : -1;
+  if(dir === "right"){
+    toast(addFav(v) ? "Gemerkt" : "Schon gemerkt"); buzz(); buildMenu();
+    const r = top.querySelector(".ribbon"); r.style.transition = "height .2s"; r.style.setProperty("--h", "190px");
+  }
+  top.style.transition = "transform .4s cubic-bezier(.4,.1,.6,1), opacity .4s";
+  top.style.transform = `translate(${sign * window.innerWidth * 1.15}px, ${dy}px) rotate(${sign * 16}deg)`;
+  top.style.opacity = "0";
+  if(next){ next.style.transition = "transform .4s, background .4s"; next.style.transform = "none"; next.style.background = "var(--page)"; }
+  setTimeout(() => { idx++; busy = false; renderDeck(); }, 380);
+}
+
+$("btnSkip").addEventListener("click", () => decide("left"));
+$("btnKeep").addEventListener("click", () => decide("right"));
+$("btnShare").addEventListener("click", () => { if(idx < deck.length) openShare(deck[idx]); });
+
+let shareVerse = null, shareFile = null, shareUrl = null;
+function wrapLines(ctx, text, maxW){
+  const words = text.split(" "), lines = []; let line = "";
+  for(const w of words){
+    const test = line ? line + " " + w : w;
+    if(ctx.measureText(test).width > maxW && line){ lines.push(line); line = w; } else line = test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+function makeImage(v){
+  const W = 1080, H = 1920, M = 110;
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
+  const ctx = c.getContext("2d");
+  const probe = document.createElement("div"); probe.dataset.cat = v.c || "gemischt"; document.body.appendChild(probe);
+  const color = getComputedStyle(probe).getPropertyValue("--tc").trim() || "#33312d"; probe.remove();
+  ctx.fillStyle = color; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "rgba(255,255,255,.92)";
+  ctx.beginPath(); ctx.moveTo(W - M - 36, 0); ctx.lineTo(W - M, 0); ctx.lineTo(W - M, 170); ctx.lineTo(W - M - 18, 148); ctx.lineTo(W - M - 36, 170); ctx.closePath(); ctx.fill();
+  const sans = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
+  const serif = '"Iowan Old Style", "Palatino Linotype", Palatino, "Noto Serif", Georgia, serif';
+  ctx.fillStyle = "rgba(255,255,255,.85)"; ctx.font = `600 40px ${sans}`; ctx.textBaseline = "alphabetic";
+  ctx.fillText("Gottes Wort für dich", M, 250);
+  let size = 78, lines, lh;
+  do{ ctx.font = `400 ${size}px ${serif}`; lines = wrapLines(ctx, v.t, W - 2 * M); lh = size * 1.42; size -= 4; }
+  while(lines.length * lh > 1080 && size > 36);
+  const blockH = lines.length * lh + 120;
+  let y = Math.max(420, (H - blockH) / 2) + lh * .8;
+  ctx.fillStyle = "#fff";
+  lines.forEach(l => { ctx.fillText(l, M, y); y += lh; });
+  ctx.font = `700 48px ${sans}`; ctx.fillText(v.r, M, y + 50);
+  ctx.fillStyle = "rgba(255,255,255,.7)"; ctx.font = `500 34px ${sans}`;
+  ctx.fillText("Lutherbibel 1912", M, H - 170);
+  return c;
+}
+function openShare(v){
+  shareVerse = v;
+  const c = makeImage(v);
+  if(shareUrl) URL.revokeObjectURL(shareUrl);
+  c.toBlob(b => {
+    shareFile = new File([b], "vers.png", { type:"image/png" });
+    shareUrl = URL.createObjectURL(b);
+    $("sheetimg").src = shareUrl;
+    $("sheetimg").alt = `${v.r}: ${v.t}`;
+    const canFiles = !!(navigator.canShare && navigator.canShare({ files:[shareFile] }));
+    $("shareImg").style.display = canFiles ? "" : "none";
+    $("sheet").classList.add("open");
+  }, "image/png");
+}
+function closeShare(){ $("sheet").classList.remove("open"); }
+$("shareClose").addEventListener("click", closeShare);
+$("sheet").addEventListener("click", e => { if(e.target.id === "sheet") closeShare(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeShare(); });
+$("shareTxt").addEventListener("click", () => { if(shareVerse) share(shareVerse); });
+$("shareImg").addEventListener("click", async () => {
+  try{ await navigator.share({ files:[shareFile] }); }
+  catch(e){ if(!(e && e.name === "AbortError")) toast("Halte das Bild gedrückt, um es zu speichern"); }
+});
+document.addEventListener("keydown", e => {
+  if(!$("swipe").classList.contains("active")) return;
+  if(e.key === "ArrowRight") decide("right");
+  if(e.key === "ArrowLeft" || e.key === " "){ e.preventDefault(); decide("left"); }
+});
+
+/* Gemerkt */
+function renderFavs(){
+  const list = $("favlist"); list.innerHTML = "";
+  if(!favs.length){
+    list.innerHTML = `<div class="empty"><p>Hier sammeln sich die Verse, die dir etwas bedeuten. Zieh einen Vers nach rechts oder tippe auf „Merken“, dann findest du ihn hier wieder.</p><button class="textbtn" id="gofind">Thema wählen</button></div>`;
+    $("gofind").addEventListener("click", goBack);
+    return;
+  }
+  favs.forEach(f => {
+    const it = document.createElement("div");
+    it.className = "saved-item"; it.dataset.cat = f.c || "gemischt";
+    it.innerHTML = `<span class="ribbon" aria-hidden="true"></span><p></p><div class="meta"><i></i><div><button data-a="share">Teilen</button><button data-a="del">Entfernen</button></div></div>`;
+    it.querySelector("p").textContent = f.t;
+    it.querySelector("i").textContent = f.r;
+    it.querySelector('[data-a="share"]').addEventListener("click", () => openShare(f));
+    it.querySelector('[data-a="del"]').addEventListener("click", () => { removeFav(keyOf(f)); renderFavs(); buildMenu(); toast("Entfernt"); });
+    list.appendChild(it);
+  });
+}
+
+/* Navigation */
+function goBack(){
+  if(navigatedIn && history.length > 1){ navigatedIn = false; history.back(); }
+  else{ location.hash = ""; }
+}
+document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", goBack));
+document.querySelectorAll(".legal-link").forEach(a => a.addEventListener("click", () => { navigatedIn = true; }));
+
+const HELP_CATS = ["trauer", "angst"];
+function openHelp(){ navigatedIn = true; location.hash = "hilfe"; }
+function route(){
+  const h = location.hash.slice(1);
+  if(h === "gemerkt"){ renderFavs(); show("fav"); }
+  else if(h === "impressum" || h === "datenschutz" || h === "hilfe"){ show(h); }
+  else if((h === "gemischt" || CAT_BY_ID[h]) && current && current.id === h && deck.length){ show("swipe"); }
+  else if(h === "gemischt" || CAT_BY_ID[h]){ startCat(h); }
+  else{ show("menu"); }
+}
+window.addEventListener("hashchange", route);
+function renderToday(){
+  const pool = uniqueAll().filter(v => ["ermutigung","hoffnung","liebe","dank","angst"].includes(v.c) && v.t.length < 150 && !v.t.includes("…"));
+  const now = new Date();
+  const day = Math.floor((now - now.getTimezoneOffset() * 60000) / 864e5);
+  const v = pool[day % pool.length];
+  const el = $("today");
+  el.dataset.cat = v.c;
+  const h = now.getHours();
+  $("greet").textContent = h >= 5 && h < 11 ? "Guten Morgen" : h >= 17 && h < 23 ? "Guten Abend" : "Hallo";
+  $("todaylabel").textContent = "Dein Vers für " + now.toLocaleDateString("de-DE", { weekday:"long", day:"numeric", month:"long" });
+  el.querySelector(".init").textContent = v.t.charAt(0);
+  el.querySelector(".rest").textContent = v.t.slice(1);
+  el.querySelector(".ref").textContent = v.r;
+  el.onclick = () => { pendingFirst = v; navigatedIn = true; location.hash = "gemischt"; };
+}
+renderToday();
+buildMenu();
+route();
+
+</script>
+</body>
+</html>
